@@ -1,0 +1,90 @@
+.cysh-paragraph-info {
+  color: #000;
+  box-shadow: 5px 5px 10px #777;
+}
+.cysh-paragraph-info h1 {
+  color: #9c5b13;
+  background: rgba(255, 154, 23, 0.22);
+  margin: 0;
+  padding: 3px 5px;
+}
+.cysh-paragraph-info p {
+  font-size: 15px;
+  margin: 0;
+  padding: 5px;
+}
+.cysh-paragraph-error {
+  color: #000;
+  box-shadow: 5px 5px 10px #777;
+}
+.cysh-paragraph-error h1 {
+  color: #f00;
+  background: rgba(255, 154, 23, 0.22);
+  margin: 0;
+  padding: 3px 5px;
+  border-bottom: 1px solid #f00;
+}
+.cysh-paragraph-error p {
+  font-size: 15px;
+  margin: 0;
+  padding: 5px;
+}
+.cysh-paragraph-contrast {
+  color: #fff;
+  box-shadow: 7px 7px 10px #777;
+}
+.cysh-paragraph-contrast h1 {
+  color: #fff;
+  background: #000;
+  margin: 0;
+  padding: 3px 5px;
+}
+.cysh-paragraph-contrast p {
+  font-size: 15px;
+  margin: 0;
+  padding: 5px;
+  background: #9c5b13;
+}
+.cysh-card-light {
+  margin: 0;
+  padding: 10px;
+  max-width: 300px;
+  transition: transform 0.3s;
+  transform: perspective(500px);
+}
+.cysh-card-light:hover {
+  transform: perspective(500px) rotateY(25deg);
+}
+.cysh-font {
+  font-size: 25px;
+}
+.cysh-font-small {
+  font-size: 15px;
+}
+.cysh-font-large {
+  font-size: 35px;
+}
+.cysh-font-Xlarge {
+  font-size: 60px;
+}
+.cysh-container {
+  display: inline;
+  position: relative;
+  padding: 10px;
+  margin: 0;
+}
+.cysh-flex-blocks-central {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+.cysh-flex-blocks-central div {
+  flex-direction: row;
+}
+html,
+body {
+  display: inline;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}

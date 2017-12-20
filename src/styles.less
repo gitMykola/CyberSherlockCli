@@ -5,36 +5,116 @@
 @color_dark: #000;
 @color_dark_grey: #777;
 @color_dark_light: #eee;
-.cs-button-default{};
-.cs-button-danger{};
-.cs-button-circle{};
-.cs-button-small{};
-.cs-button-large{};
-.cs-paragraph-info{};
-.cs-paragraph-alert{};
-.cs-paragraph-contrast{};
-.cs-paragraph-transparent{};
-.cs-paragraph-transparent-light{};
-.cs-paragraph-transparent-dark{};
-.cs-card-light{};
-.cs-card-dark{};
-.cs-default{};
-.cs-transparent{};
-.cs-transparent-light{};
-.cs-transparent-dark{};
-.cs-font{};
-.cs-font-small{};
-.cs-font-large{};
-.cs-font-Xlarge{};
-.cs-menu-top{};
-.cs-menu-shiftrigth{};
-.cs-container{};
-.cs-flex-blocks-central{};
-.cs-flex-blocks-left{};
-.cs-flex-blocks-rigth{};
-.cs-flex-row{};
+@color_error: #f00;
+.cysh-button-default{};
+.cysh-button-danger{};
+.cysh-button-circle{};
+.cysh-button-small{};
+.cysh-button-large{};
+.cysh-paragraph-info{
+  h1{
+    color: @color_main_dark;
+    background: @color_main_light;
+    margin:0;
+    padding: 3px 5px;
+  }
+  p{
+    .cysh-font-small;
+    margin:0;
+    padding: 5px;
+  }
+  color: @color_dark;
+  box-shadow: 5px 5px 10px @color_dark_grey;
+};
+.cysh-paragraph-error{
+  h1{
+    color: @color_error;
+    background: @color_main_light;
+    margin:0;
+    padding: 3px 5px;
+    border-bottom:1px solid @color_error;
+  }
+  p{
+    .cysh-font-small;
+    margin:0;
+    padding: 5px;
+  }
+  color: @color_dark;
+  box-shadow: 5px 5px 10px @color_dark_grey;
+};
+.cysh-paragraph-alert{};
+.cysh-paragraph-contrast{
+  h1{
+    color: @color_light;
+    background: @color_dark;
+    margin:0;
+    padding: 3px 5px;
+  }
+  p{
+    .cysh-font-small;
+    margin:0;
+    padding: 5px;
+    background: @color_main_dark;
+  }
+  color: @color_light;
+  box-shadow: 7px 7px 10px @color_dark_grey;
+};
+.cysh-paragraph-transparent{};
+.cysh-paragraph-transparent-light{};
+.cysh-paragraph-transparent-dark{};
+.cysh-card-light{
+  margin:0;
+  padding:10px;
+  max-width:300px;
+  transition: transform 0.3s;
+  transform: perspective(500px);
+};
+.cysh-card-light:hover{
+  transform: perspective(500px) rotateY(25deg);
+};
+.cysh-card-dark{};
+.cysh-default{};
+.cysh-transparent{};
+.cysh-transparent-light{};
+.cysh-transparent-dark{};
+.cysh-font{
+  font-size: 25px;
+};
+.cysh-font-small{
+  font-size:15px;
+};
+.cysh-font-large{
+  font-size:35px;
+};
+.cysh-font-Xlarge{
+  font-size:60px;
+};
+.cysh-menu-top{};
+.cysh-menu-shiftrigth{};
+.cysh-container{
+  display:inline;
+  position: relative;
+  padding:10px;
+  margin:0;
+};
+.cysh-flex-blocks-central{
+  display:flex;
+  flex-flow:row wrap;
+  justify-content: center;
+  div{
+    flex-direction: row;
+  }
+};
+.cysh-flex-blocks-left{};
+.cysh-flex-blocks-rigth{};
+.cysh-flex-row{};
 
-
+html,body{
+  display:inline;
+  position: relative;
+  margin:0;
+  padding:0;
+}
 
 
 
