@@ -1,10 +1,41 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya');
+.cysh-button-default {
+  font-size: 25px;
+  display: block;
+  position: relative;
+  margin: 3px;
+  padding: 0 15px;
+  border: 1px solid #9c5b13;
+  border-radius: 3px;
+  background: #ffe9d7;
+  color: #9c5b13;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.cysh-button-default:hover {
+  background: #ffcd92;
+}
+.cysh-button-danger {
+  font-size: 25px;
+  display: block;
+  position: relative;
+  margin: 3px;
+  padding: 0 15px;
+  border: 1px solid #9c5b13;
+  border-radius: 3px;
+  background: #ffe9d7;
+  color: #9c5b13;
+  cursor: pointer;
+  transition: background 0.3s;
+  color: #f00;
+}
 .cysh-paragraph-info {
   color: #000;
   box-shadow: 5px 5px 10px #777;
 }
 .cysh-paragraph-info h1 {
   color: #9c5b13;
-  background: rgba(255, 154, 23, 0.22);
+  background: #ffcd92;
   margin: 0;
   padding: 3px 5px;
 }
@@ -12,14 +43,15 @@
   font-size: 15px;
   margin: 0;
   padding: 5px;
+  background: #ffe9d7;
 }
 .cysh-paragraph-error {
-  color: #000;
+  color: #f00;
   box-shadow: 5px 5px 10px #777;
 }
 .cysh-paragraph-error h1 {
   color: #f00;
-  background: rgba(255, 154, 23, 0.22);
+  background: #ffcd92;
   margin: 0;
   padding: 3px 5px;
   border-bottom: 1px solid #f00;
@@ -45,15 +77,36 @@
   padding: 5px;
   background: #9c5b13;
 }
+.cysh-paragraph-transparent {
+  color: #fff;
+}
+.cysh-paragraph-transparent h1 {
+  color: #ffcd92;
+  margin: 0;
+  padding: 3px 5px;
+  border-bottom: 1px solid #ffcd92;
+}
+.cysh-paragraph-transparent p {
+  font-size: 15px;
+  margin: 0;
+  padding: 5px;
+  background: rgba(255, 154, 23, 0.41);
+}
 .cysh-card-light {
   margin: 0;
   padding: 10px;
-  max-width: 300px;
+  width: 300px;
+}
+.cysh-active-rotate {
+  cursor: pointer;
   transition: transform 0.3s;
   transform: perspective(500px);
 }
-.cysh-card-light:hover {
-  transform: perspective(500px) rotateY(25deg);
+.cysh-active-rotate:hover {
+  transform: perspective(500px) translateZ(-10px) rotateY(25deg);
+}
+.cysh-transparent {
+  background: transparent;
 }
 .cysh-font {
   font-size: 25px;
@@ -73,6 +126,20 @@
   padding: 10px;
   margin: 0;
 }
+.cysh-container-dark {
+  display: inline;
+  position: relative;
+  padding: 10px;
+  margin: 0;
+  background: #000;
+}
+.cysh-container-dark-gradient {
+  display: inline;
+  position: relative;
+  padding: 10px;
+  margin: 0;
+  background: linear-gradient(200deg, #eee, #ffcd92);
+}
 .cysh-flex-blocks-central {
   display: flex;
   flex-flow: row wrap;
@@ -87,4 +154,63 @@ body {
   position: relative;
   margin: 0;
   padding: 0;
+}
+@font-face {
+  font-family: cyshFont;
+  src: url('/assets/Raleway Thin.otf');
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+a,
+p,
+span,
+label,
+input,
+button {
+  font-family: "Alegreya", sans-serif;
+  font-weight: 100;
+}
+.cysh-btn-3d {
+  display: block;
+  position: relative;
+  width: 100px;
+  height: 50px;
+}
+.cysh-btn-3d div {
+  display: block;
+  position: absolute;
+  right: -100px;
+  transform: perspective(1500px);
+}
+.cysh-btn-3d div div {
+  display: block;
+  position: absolute;
+  background: #ffcd92;
+  border: 1px solid #9c5b13;
+  width: 60px;
+  transition: transform 0.3s;
+}
+.cysh-btn-3d div .b1 {
+  height: 15px;
+  transform: perspective(1500px) rotateX(-20deg) rotateY(45deg) translate3d(0px, 0px, 31px);
+}
+.cysh-btn-3d div .b2 {
+  height: 15px;
+  transform: perspective(1500px) rotateX(-20deg) rotateY(-45deg) translate3d(0px, 0px, 31px);
+}
+.cysh-btn-3d div .b3 {
+  height: 60px;
+  transform: perspective(1500px) rotateX(69deg) rotateZ(45deg) translate3d(0px, 0px, 32px);
+}
+.cysh-btn-3d div .b4 {
+  height: 60px;
+  transform: perspective(1500px) rotateX(69deg) rotateZ(45deg) translate3d(0px, 0px, 14px);
+  background: transparent;
+  border: none;
+  box-shadow: 40px 40px 20px #777;
 }
