@@ -174,6 +174,8 @@ body {
   position: relative;
   margin: 0;
   padding: 0;
+  width: 100%;
+  transform: perspective(1000px);
 }
 @font-face {
   font-family: cyshFont;
@@ -257,9 +259,6 @@ button {
   background: transparent;
   border: none;
   box-shadow: 40px 40px 20px #777;
-}
-body {
-  transform: perspective(1000px);
 }
 body .start-slide {
   display: block;
