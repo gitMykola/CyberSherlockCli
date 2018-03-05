@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TranslatorService } from './_services';
+import { TranslatorService, UserService } from './_services';
 import { routing } from './app.routing';
 
 import { AppComponent } from './app.component';
@@ -12,6 +12,7 @@ import {HowtoComponent} from './howto';
 import {AboutComponent} from './about';
 import {EventsComponent} from './events';
 import {ContactsComponent} from './contacts';
+import {TopNavComponent} from './components/topNav.component' ;
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {ContactsComponent} from './contacts';
       AboutComponent,
       EventsComponent,
       ContactsComponent,
+      TopNavComponent,
       HmComponent,
       RoomComponent,
       AuthorComponent
@@ -29,7 +31,10 @@ import {ContactsComponent} from './contacts';
     BrowserModule,
       routing
   ],
-  providers: [TranslatorService],
+  providers: [
+      TranslatorService,
+      UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

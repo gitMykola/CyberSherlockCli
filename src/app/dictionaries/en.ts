@@ -24,7 +24,9 @@ export const EN = {
         howto: 'How to',
         about: 'About',
         events: 'Events',
-        contacts: 'Contacts'
+        contacts: 'Contacts',
+        enter: 'Entrance',
+        exit: 'Exit'
     },
     langs: {
         de: 'Deutsch',

@@ -5,7 +5,7 @@ import {TranslatorService} from '../_services';
 @Component({
     selector: 'app-hm',
     templateUrl: './hm.component.html',
-    styleUrls: ['../styles.css']
+    styleUrls: ['../../styles.css']
 })
 export class HmComponent implements OnInit {
 

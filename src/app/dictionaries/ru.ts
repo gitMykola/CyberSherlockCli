@@ -24,7 +24,9 @@ export const RU = {
         howto: 'Поддержка',
         about: 'О проекте',
         events: 'События',
-        contacts: 'Контакты'
+        contacts: 'Контакты',
+        enter: 'Вход',
+        exit: 'Выход'
     },
     langs: {
         de: 'Deutsch',
