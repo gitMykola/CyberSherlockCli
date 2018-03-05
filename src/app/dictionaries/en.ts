@@ -4,12 +4,33 @@ export const EN = {
         yes: 'Yes',
         no: 'No',
         confirm: 'Confirm',
-        cancel: 'Cancel'
+        cancel: 'Cancel',
+        close: 'Close'
     },
     app: {
         title_1: 'CYBER ',
         title_2: 'SHERLOCK',
         systemName: 'HYBRID INTERACTIVE ENGINE'
+    },
+    labels: {
+        email: 'Email',
+        phone: 'Phone',
+        passphrase: 'Passphrase',
+        cpass: 'Confirm passphrase',
+        date: 'Date',
+        time: 'Time',
+        sender: 'Sender',
+        receiver: 'Receiver',
+        ammount: 'Ammount',
+        fee: 'Fee',
+        balance: 'Balance',
+        hash: 'Hash',
+        id: 'Id',
+        send_money: 'Send money',
+        refresh: 'Refresh',
+        send: 'Send',
+        send_email: 'Send email',
+        advanced: 'Advanced',
     },
     err: {
         serverConnectionError: 'Connection server error.',

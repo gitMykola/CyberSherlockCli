@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TranslatorService, UserService } from './_services';
+import {MapService, TranslatorService, UserService} from './_services';
 import { routing } from './app.routing';
 
 import { AppComponent } from './app.component';
@@ -33,7 +33,8 @@ import {TopNavComponent} from './components/topNav.component' ;
   ],
   providers: [
       TranslatorService,
-      UserService
+      UserService,
+      MapService
   ],
   bootstrap: [AppComponent]
 })

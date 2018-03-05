@@ -6,6 +6,7 @@
 @color_main_dark: #9c5b13;
 @color_light: #fff;
 @color_dark: #000;
+@color_dark_transparent: rgba(50,50,50,0.7);
 @color_dark_grey: #777;
 @color_dark_light: #eee;
 @color_error: #f00;
@@ -21,7 +22,7 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
   &:hover {
     background: @color_main_light;
   }
-}
+};
 .element-transparent {
   .element-default;
   background: transparent;
@@ -104,5 +105,19 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
         padding: 0 5px;
       }
     }
+  }
+};
+.modal-block {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  background: @color_dark_transparent;
+};
+.scroll-hide {
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

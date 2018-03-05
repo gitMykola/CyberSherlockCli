@@ -23,3 +23,8 @@ export class Media {
     public owner: string;
     public neuro: string[];
 }
+export class Info {
+    public type: number;
+    public info: string;
+    public time: number;
+}
