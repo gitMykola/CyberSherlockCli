@@ -1,10 +1,13 @@
 import {Component} from '@angular/core';
 import {TranslatorService} from '../_services';
+import {anim} from './animations';
+import {transition, trigger, useAnimation} from '@angular/animations';
 
 @Component({
     selector: 'app-login',
     template: `
-        <div class="modal-block">
+        <div [@login]="show"
+                class="modal-block">
             <form class="login-form">
                 <div class="form-block">
                     <button class="form-close"
@@ -22,11 +25,26 @@ import {TranslatorService} from '../_services';
                 </div>
             </form>
         </div>
-    `
+    `,
+    animations: [
+        trigger('login', [
+            transition('* => true', useAnimation(anim.fadeIn,
+                {params: {
+                        time: 500
+                    }})),
+            transition('true => false', useAnimation(anim.fadeOut,
+                {params: {
+                        time: 500
+                    }}))
+        ])
+    ]
 })
 export class LoginComponent {
+    public show: boolean;
     constructor (
         public ts: TranslatorService
-    ) {}
+    ) {
+        this.show = false;
+    }
     showValidateFormFieldError (target) {}
 }

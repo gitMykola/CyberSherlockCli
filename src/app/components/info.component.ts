@@ -1,55 +1,39 @@
-import {Component, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Component} from '@angular/core';
 import {InfoMonitor, TranslatorService} from '../_services';
-import {Info} from '../_services/elements';
-import {transition, trigger, useAnimation} from '@angular/animations';
-import {anim} from './animations';
+import {DT} from '../_services/elements';
 
 @Component ({
     selector: 'app-info',
     template: `
         <div id="info-monitor">
-            <div class="last">{{lastInfo.info}}
-            </div>
         </div>
-        <>
+        <table class="info-content">
+            <tr class="info-header">
+                <th>{{ts.translate('labels.date')}}</th>
+                <th>{{ts.translate('labels.time')}}</th>
+                <th>{{ts.translate('labels.message')}}</th>
+            </tr>
+            <tr *ngFor="let info of im.info"
+            class="info {{info.type === 2 ? 'error' : info.type === 1 ? 'warrning' : ''}}">
+                <td>{{dt.toDate(info.time)}}</td>
+                <td>{{dt.toTime(info.time)}}</td>
+                <td>{{info.info}}</td>
+            </tr>
+        </table>
     `,
     styles: [`
         #info-monitor .last {
-            display: none;
+            display: block;
             position: fixed;
             bottom: 0;
             left: 0;
         }
-    `],
-    animations: [
-        trigger('last', [
-            transition('* => true', useAnimation(anim.fadeIn,
-                {params: {
-                    time: 500
-                    }})),
-            transition('true => false', useAnimation(anim.fadeOut,
-                {params: {
-                    time: 500
-                    }}))
-        ])
-    ]
+    `]
 })
-export class InfoComponent implements OnInit{
-    private _newInfo: Subscription;
-    public lastInfo: Info;
-    public show: boolean;
+export class InfoComponent {
+    public dt = DT;
     constructor (
-        private _im: InfoMonitor,
-        private ts: TranslatorService
+        public im: InfoMonitor,
+        public ts: TranslatorService
     ) {}
-    ngOnInit () {
-        this._newInfo = this._im.onInfo$.subscribe(data => this
-            .showInfo(data));
-    }
-    showInfo (data) {
-        this.lastInfo = data;
-        this.show = true;
-        setTimeout(() => this.show = false, 7000);
-    }
 }

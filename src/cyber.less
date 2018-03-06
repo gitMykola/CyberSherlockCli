@@ -18,7 +18,57 @@ html {
   body {
     .block-relative;
     .transform-3d;
-
+    #topnav {
+      display: flex;
+      position: absolute;
+      top: 0;
+      right: 0;
+      max-width: 700px;
+      height: 60px;
+      align-content: right;
+      background: @color_main_light;
+      background: linear-gradient(@color_main_light 50%, transparent);
+      z-index: 1000;
+    };
+    #dash-board {
+      display: flex;
+      position: absolute;
+      top: 100px;
+      right: 0;
+      width: 300px;
+      flex-direction: column;
+      align-content: right;
+      justify-content: right;
+      .dash-block {
+        display: inline;
+        justify-content: right;
+        max-width: 300px;
+        .header {
+          width: 100%;
+          margin: 0;
+        };
+        .button-block {
+          width: 100%;
+          max-width: 100%;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          button {
+            display: flex;
+            flex-direction: column;
+            //align-content: center;
+            justify-content: center;
+            span {
+              flex: auto 1 1;
+              padding: 5px 2px;
+            };
+            span:nth-child(2) {
+              display: block;
+            };
+          }
+        };
+      }
+    }
   }
 }
 @media screen and (max-width: 768px) {

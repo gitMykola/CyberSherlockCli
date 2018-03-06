@@ -1,40 +1,67 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {MapService, TranslatorService, UserService} from './_services';
+import {
+    InfoMonitor,
+    MediaService,
+    ResizeService,
+    TaskService,
+    TranslatorService,
+    UserService
+} from './_services';
 import { routing } from './app.routing';
 
 import { AppComponent } from './app.component';
 import {HmComponent} from './_hm';
 import {RoomComponent} from './_room';
 import {AuthorComponent} from './author/author.component';
-import {MapComponent} from './map';
+import {MapGoogleComponent, MapYandexComponent} from './map';
 import {HowtoComponent} from './howto';
 import {AboutComponent} from './about';
 import {EventsComponent} from './events';
 import {ContactsComponent} from './contacts';
-import {TopNavComponent} from './components/topNav.component' ;
+import {
+    DashBoardComponent,
+    InfoComponent,
+    LastInfoComponent,
+    LoginComponent,
+    TopNavComponent
+} from './components' ;
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
     AppComponent,
-      MapComponent,
+      MapYandexComponent,
+      MapGoogleComponent,
       HowtoComponent,
       AboutComponent,
       EventsComponent,
       ContactsComponent,
       TopNavComponent,
+      InfoComponent,
+      LastInfoComponent,
+      LoginComponent,
       HmComponent,
       RoomComponent,
-      AuthorComponent
+      AuthorComponent,
+      DashBoardComponent
   ],
   imports: [
     BrowserModule,
-      routing
+      BrowserAnimationsModule,
+      routing,
+      AgmCoreModule.forRoot({
+        apiKey: 'AIzaSyAGoK2EXOHJsdq4yb7Hsz-_pKrZVEGmAh4'
+      })
   ],
   providers: [
       TranslatorService,
       UserService,
-      MapService
+      InfoMonitor,
+      ResizeService,
+      TaskService,
+      MediaService
   ],
   bootstrap: [AppComponent]
 })

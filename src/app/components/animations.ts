@@ -8,10 +8,10 @@ export const anim = {
                 opacity: 1,
                 offset: 0
             }),
-            style({
-                opacity: 0,
-                offset: 0.99
-            }),
+                style({
+                    opacity: 0,
+                    offset: 0.99
+                }),
                 style({
                     display: 'none',
                     offset: 1
@@ -25,9 +25,9 @@ export const anim = {
     fadeIn: animation([
         animate('{{ time }}ms cubic-bezier(0, 1, 0, 1)',
             keyframes([
-            style({
-                display: 'block',
-                offset: 0}),
+                style({
+                    display: 'block',
+                    offset: 0}),
             style({
                 opacity: 0,
                 offset: 0.01}),

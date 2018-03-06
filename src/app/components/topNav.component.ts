@@ -1,4 +1,4 @@
-import {TranslatorService} from '../_services';
+import {InfoMonitor, TranslatorService} from '../_services';
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {config} from '../config';
 import {UserService} from '../_services';
@@ -25,7 +25,8 @@ export class TopNavComponent implements AfterViewInit {
     _menu: object;
     constructor (
         public ts: TranslatorService,
-        public user: UserService
+        public user: UserService,
+        public im: InfoMonitor
     ) {
         this._menu = config().app.topnav;
     }
@@ -35,5 +36,6 @@ export class TopNavComponent implements AfterViewInit {
     action (e: Event, name: string) {
         e.preventDefault();
         this.user.authen(name);
+        this.im.add(name, 0);
     }
 }

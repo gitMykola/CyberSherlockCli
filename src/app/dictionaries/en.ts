@@ -5,7 +5,13 @@ export const EN = {
         no: 'No',
         confirm: 'Confirm',
         cancel: 'Cancel',
-        close: 'Close'
+        close: 'Close',
+        add: 'Add',
+        edit: 'Edit',
+        remove: 'Remove',
+        delete: 'Delete',
+        find: 'Find',
+        filter: 'Filter'
     },
     app: {
         title_1: 'CYBER ',
@@ -31,6 +37,15 @@ export const EN = {
         send: 'Send',
         send_email: 'Send email',
         advanced: 'Advanced',
+        message: 'Message',
+        warning: 'Warning',
+        error: 'Error',
+        tasks: 'Tasks',
+        catchers: 'Catchers',
+        media: 'Photo/Video',
+        photo: 'Photo',
+        video: 'Video',
+        chat: 'Chat'
     },
     err: {
         serverConnectionError: 'Connection server error.',
@@ -48,6 +63,18 @@ export const EN = {
         contacts: 'Contacts',
         enter: 'Entrance',
         exit: 'Exit'
+    },
+    actions: {
+        find_catchers: 'Find cathers',
+        chat_catcher: 'Chat catcher',
+        add_photo: 'Add photo',
+        add_video: 'Add video',
+        find_photo: 'Find photo',
+        find_media: 'Find photo/video',
+        make_high_resolution_photo: 'High Resolution photo',
+        get_photo: 'Get photo',
+        get_many_photos: 'Get photos',
+        get_video: 'Get video'
     },
     langs: {
         de: 'Deutsch',

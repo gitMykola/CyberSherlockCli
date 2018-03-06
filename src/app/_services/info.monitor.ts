@@ -3,9 +3,10 @@ import {Info} from './elements';
 
 @Injectable()
 export class InfoMonitor {
-    private _info: Info[];
+    public info: Info[];
     public onInfo$ = new EventEmitter<Info>();
     constructor() {
+        this.info = [];
     }
     add (msg: string, type: number) {
         if (typeof msg === 'string'
@@ -17,16 +18,16 @@ export class InfoMonitor {
                 info = new Info();
             info.info = msg;
             info.type = type;
-            info.time = date.getTime();
-            this._info.push(info);
-            if (this._info.length > 100) {
-                this._info.shift();
+            info.time = Math.round(date.getTime() / 1000);
+            this.info.push(info);
+            if (this.info.length > 100) {
+                this.info.shift();
             }
             this.onInfo$.emit(info);
         }
     }
     get (filter: any): any {
-        let res = this._info;
+        let res = this.info;
         if (!filter) {
             return [];
         } else {
@@ -48,6 +49,6 @@ export class InfoMonitor {
         return res;
     }
     getAll () {
-        return this._info;
+        return this.info;
     }
 }

@@ -6,6 +6,7 @@ export class ResizeService {
 
     public onResize$ = new EventEmitter<{ width: number; height: number; }>();
     public onLoad$ = new EventEmitter<{ width: number; height: number; }>();
+    public onOrientationChange$ = new EventEmitter<{ width: number; height: number; }>();
     public onScroll$ = new EventEmitter<{
         scrollY: number;
         scrollX: number;
@@ -29,5 +30,11 @@ export class ResizeService {
                 scrollX: e.currentTarget.scrollX,
                 height: e.currentTarget.innerHeight
             }));
+        eventManager.addGlobalEventListener('window', 'orientationchange',
+            e => this.onOrientationChange$.emit({
+                    width: e.currentTarget.innerWidth,
+                    height: e.currentTarget.innerHeight
+                })
+            );
     }
 }

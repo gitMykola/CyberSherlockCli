@@ -53,36 +53,41 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
   font-size:60px;
 };
 .paragraph-info{
-  h1,h2,h3,h4{
+  h1,h2,h3,h4,h5,h6{
     color: @color_main_dark;
     background: @color_main_light;
     margin:0;
     padding: 3px 5px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
   }
   p{
     .font-small;
     margin:0;
     padding: 5px;
     background: @color_main_superlight;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
   }
   color: @color_dark;
   box-shadow: 5px 5px 10px @color_dark_grey;
+  border-radius: 3px;
+};
+.paragraph-warning{
+  .paragraph-info;
+  h1,h2,h3,h4,h5,h6{
+    color: @color_light;
+    background: @color_main_dark;
+    border-bottom:1px solid @color_light;
+  }
 };
 .paragraph-error{
-  h1,h2,h3,h4{
-    color: @color_error;
-    background: @color_main_light;
-    margin:0;
-    padding: 3px 5px;
-    border-bottom:1px solid @color_error;
+  .paragraph-info;
+  h1,h2,h3,h4,h5,h6{
+    color: @color_light;
+    background: @color_error;
+    border-bottom:1px solid @color_light;
   }
-  p{
-    .font-small;
-    margin:0;
-    padding: 5px;
-  }
-  color: @color_error;
-  box-shadow: 5px 5px 10px @color_dark_grey;
 };
 .flex-row{
   display: flex;
@@ -91,6 +96,7 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
 .list {
   .active {
     background: @color_main_transparent_super;
+    background: linear-gradient(@color_main_transparent_super 50%, transparent);
   };
   li {
     .element-transparent;
@@ -105,10 +111,17 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
         padding: 0 5px;
       }
     }
+    &:hover {
+      a {
+        color: @color_light!important;
+      }
+      background: @color_main_light;
+      background: linear-gradient(@color_main_light 50%, transparent);
+    }
   }
 };
 .modal-block {
-  display: block;
+  display: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -120,4 +133,12 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
   &::-webkit-scrollbar {
     display: none;
   }
-}
+};
+.slide-container{
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+};
