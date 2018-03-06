@@ -27,7 +27,11 @@ import {
     TopNavComponent
 } from './components' ;
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { AgmCoreModule } from '@agm/core';
+import {
+    AgmCoreModule,
+    GoogleMapsAPIWrapper,
+    MarkerManager
+} from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -61,7 +65,9 @@ import { AgmCoreModule } from '@agm/core';
       InfoMonitor,
       ResizeService,
       TaskService,
-      MediaService
+      MediaService,
+      MarkerManager,
+      GoogleMapsAPIWrapper
   ],
   bootstrap: [AppComponent]
 })

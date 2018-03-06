@@ -41,8 +41,8 @@ export const RU = {
         warning: 'Предупреждение',
         error: 'Ошибка',
         tasks: 'Задачи',
-        catchers: 'Исполнители',
-        media: 'Фото/Видео',
+        people: 'Люди',
+        media: 'Meдиа',
         photo: 'Фото',
         video: 'Видео',
         chat: 'Чат'
@@ -65,16 +65,10 @@ export const RU = {
         exit: 'Выход'
     },
     actions: {
-        find_catchers: 'Найти исполнителя',
-        chat_catcher: 'Чат с исполнителем',
-        add_photo: 'Добавить фото',
-        add_video: 'Добавить видео',
-        find_photo: 'Найти фото',
-        find_media: 'НАйти фото/видео',
-        make_high_resolution_photo: 'Сделать фото с большим разрешением',
-        get_photo: 'Получить фото',
-        get_many_photos: 'Получить много фото',
-        get_video: 'Получить видео'
+        find: 'Найти',
+        add: 'Добавить',
+        edit: 'Изменить',
+        remove: 'Удалить'
     },
     langs: {
         de: 'Deutsch',

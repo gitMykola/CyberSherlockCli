@@ -2,7 +2,7 @@ export class Task {
     public id: string;
     public location: {
         lat: number,
-        lang: number
+        lng: number
     };
     public type: number;
     public description: string;
@@ -15,7 +15,7 @@ export class Media {
     public id: string;
     public location: {
         lat: number,
-        lang: number
+        lng: number
     };
     public url: number;
     public hash: string;
@@ -42,3 +42,4 @@ export class DT {
             + ((t.getSeconds() < 10) ? '0' : '') + t.getSeconds();
     }
 }
+

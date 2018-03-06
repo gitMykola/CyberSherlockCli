@@ -41,8 +41,8 @@ export const EN = {
         warning: 'Warning',
         error: 'Error',
         tasks: 'Tasks',
-        catchers: 'Catchers',
-        media: 'Photo/Video',
+        people: 'People',
+        media: 'Media',
         photo: 'Photo',
         video: 'Video',
         chat: 'Chat'
@@ -65,16 +65,12 @@ export const EN = {
         exit: 'Exit'
     },
     actions: {
-        find_catchers: 'Find cathers',
-        chat_catcher: 'Chat catcher',
-        add_photo: 'Add photo',
-        add_video: 'Add video',
-        find_photo: 'Find photo',
-        find_media: 'Find photo/video',
-        make_high_resolution_photo: 'High Resolution photo',
-        get_photo: 'Get photo',
-        get_many_photos: 'Get photos',
-        get_video: 'Get video'
+        find: 'Find',
+        add: 'Add',
+        edit: 'Edit',
+        remove: 'Remove',
+        select: 'Select',
+        deselect: 'Deselect'
     },
     langs: {
         de: 'Deutsch',
