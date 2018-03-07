@@ -67,7 +67,15 @@ export function config() {
                     {
                         name: 'tasks',
                         icon: 'add_location',
-                        auth: false,
+                        auth: true,
+                        selected: false
+                    }
+                ],
+                showall: [
+                    {
+                        name: 'show_all',
+                        icon: 'group_add',
+                        auth: true,
                         selected: false
                     }
                 ],

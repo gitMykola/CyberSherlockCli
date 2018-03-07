@@ -10,6 +10,7 @@ export class Task {
     public owner: string;
     public state: number;
     public created: number;
+    public show: boolean;
 }
 export class Media {
     public id: string;
@@ -17,11 +18,35 @@ export class Media {
         lat: number,
         lng: number
     };
+    public type: number;
     public url: number;
     public hash: string;
     public cost: number;
     public owner: string;
     public neuro: string[];
+    public show: boolean;
+    public draggable: boolean;
+    public iconUrl: string;
+    public label: string;
+}
+export class People {
+    public location: {
+        lat: number,
+        lng: number
+    };
+    public type: number;
+    devices: Device[];
+    public comments: string;
+    public state: number;
+    public priceFloor: number;
+    public show: boolean;
+}
+export class Device {
+    type: string;
+    brand: string;
+    model: string;
+    resolution: number;
+    description: string;
 }
 export class Info {
     public type: number;

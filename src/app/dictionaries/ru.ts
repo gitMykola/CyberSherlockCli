@@ -45,7 +45,8 @@ export const RU = {
         media: 'Meдиа',
         photo: 'Фото',
         video: 'Видео',
-        chat: 'Чат'
+        chat: 'Чат',
+        show_all: 'Показать все'
     },
     err: {
         serverConnectionError: 'Ошибка соединения с сервером.',
@@ -69,6 +70,10 @@ export const RU = {
         add: 'Добавить',
         edit: 'Изменить',
         remove: 'Удалить'
+    },
+    info: {
+        done: 'Сделал',
+        error: 'Ошибка'
     },
     langs: {
         de: 'Deutsch',

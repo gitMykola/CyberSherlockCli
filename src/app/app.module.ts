@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import {
     InfoMonitor,
     MediaService,
+    PeopleService,
     ResizeService,
     TaskService,
     TranslatorService,
@@ -66,6 +67,7 @@ import {
       ResizeService,
       TaskService,
       MediaService,
+      PeopleService,
       MarkerManager,
       GoogleMapsAPIWrapper
   ],

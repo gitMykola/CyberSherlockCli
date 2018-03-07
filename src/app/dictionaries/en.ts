@@ -45,7 +45,8 @@ export const EN = {
         media: 'Media',
         photo: 'Photo',
         video: 'Video',
-        chat: 'Chat'
+        chat: 'Chat',
+        show_all: 'Show all'
     },
     err: {
         serverConnectionError: 'Connection server error.',
@@ -71,6 +72,10 @@ export const EN = {
         remove: 'Remove',
         select: 'Select',
         deselect: 'Deselect'
+    },
+    info: {
+        done: 'Done',
+        error: 'Error'
     },
     langs: {
         de: 'Deutsch',
