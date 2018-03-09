@@ -71,7 +71,8 @@ export const EN = {
         edit: 'Edit',
         remove: 'Remove',
         select: 'Select',
-        deselect: 'Deselect'
+        deselect: 'Deselect',
+        hide: 'Hide'
     },
     info: {
         done: 'Done',

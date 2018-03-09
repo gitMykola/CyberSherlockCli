@@ -62,19 +62,11 @@ export function config() {
                         name: 'media',
                         icon: 'add_a_photo',
                         auth: false,
-                        selected: false
+                        selected: true
                     },
                     {
                         name: 'tasks',
                         icon: 'add_location',
-                        auth: true,
-                        selected: false
-                    }
-                ],
-                showall: [
-                    {
-                        name: 'show_all',
-                        icon: 'group_add',
                         auth: true,
                         selected: false
                     }
@@ -99,6 +91,12 @@ export function config() {
                         action: 'remove',
                         icon: 'remove_circle_outline',
                         auth: false
+                    },
+                    {
+                        action: 'hide',
+                        icon: 'flip_to_back',
+                        auth: false,
+                        selected: false
                     }
                 ]
             }

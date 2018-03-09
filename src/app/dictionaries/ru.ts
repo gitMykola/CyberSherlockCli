@@ -69,7 +69,8 @@ export const RU = {
         find: 'Найти',
         add: 'Добавить',
         edit: 'Изменить',
-        remove: 'Удалить'
+        remove: 'Удалить',
+        hide: 'Скрыть'
     },
     info: {
         done: 'Сделал',

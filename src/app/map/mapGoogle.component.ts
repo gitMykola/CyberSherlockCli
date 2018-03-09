@@ -19,18 +19,20 @@ import * as $ from 'jquery';
                  [longitude]="map.lng"
                  [zoom]="map.zoom"
                  [zoomControl]="false"
+                 [mapTypeControl]="true"
                 (mapClick)="mapClick($event)"
                 (centerChange)="mapCenterChange($event)">
-            <agm-marker *ngFor="let m of media.medias"
+            <agm-marker *ngFor="let m of media.medias; index as k"
                     [latitude]="m.location.lat"
                     [longitude]="m.location.lng"
                     [markerClickable]="true"
                     [markerDraggable]="m.draggable"
                     [iconUrl]="m.iconUrl"
-                    (markerClick)="mapClick($event)"
-                    (mouseOver)="mapClick($event)">
+                    (markerClick)="mediaMarkerClick(k)"
+                    (dragEnd)="mapClick($event)"
+                    [opacity]="m.opacity">
                 <agm-info-window>
-                    <img src="../../assets/img/odessa.png" height="72" width="128">
+                    <img [src]="m.url" height="72" width="128">
                 </agm-info-window>
             </agm-marker>
         </agm-map>
@@ -43,6 +45,9 @@ export class MapGoogleComponent implements AfterViewChecked {
         lng: number,
         zoom: number
     };
+    public mediaHide: boolean;
+    public taskHide: boolean;
+    public peopleHide: boolean;
     constructor (
         private _im: InfoMonitor,
         public ts: TranslatorService,
@@ -56,6 +61,7 @@ export class MapGoogleComponent implements AfterViewChecked {
             lng: 30.7426535,
             zoom: 18
         };
+        this.mediaHide = this.taskHide = this.peopleHide = false;
     }
     ngAfterViewChecked () {
         const h = window.innerHeight,
@@ -99,16 +105,27 @@ export class MapGoogleComponent implements AfterViewChecked {
                     lng: this.map.lng
                 },
                 draggable: true,
-                iconUrl: '../../assets/img/icons/media/make_photo_64.png',
+                iconUrl: '../../assets/img/icons/mapGPS/task_new_photo_.png',
                 url: '../../assets/img/odessa.png',
-                label: 'PHOTO'
+                opacity: 1
             })
-                .then(() => this
-                    ._im.add(this.ts.translate('info.done'), 0))
+                .then(() => {
+                    this
+                        ._im.add(this.ts.translate('info.done'), 0);
+                    console.dir(this.media.medias);
+                })
                 .catch(e => this
                     ._im.add(this.ts.translate('info.error') + ' ' + e.message, 1));
+        }
+        if (action === 'hide') {
+            this.media.medias.forEach(m => m.opacity = m.opacity ? 0 : 1);
+            this.mediaHide = !this.mediaHide;
         }
     }
     taskAct(action: string) {}
     peopleAct(action: string) {}
+    mediaMarkerClick(index: number) {
+        this.media.medias.forEach(m => m.iconUrl = m.iconUrl.replace('active', ''));
+        this.media.medias[index].iconUrl = '../../assets/img/icons/mapGPS/task_new_photo_active.png';
+    }
 }

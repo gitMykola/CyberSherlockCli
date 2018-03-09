@@ -45,6 +45,9 @@ export class MediaService {
                             },
                             label: (value) => {
                                 return typeof (value) === 'string' && value.length < 256;
+                            },
+                            opacity: (value) => {
+                                return typeof (value) === 'number' && [0, 1].indexOf(value) > 0;
                             }
                         },
                         keys = Object.keys(data);

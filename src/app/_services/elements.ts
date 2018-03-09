@@ -16,18 +16,25 @@ export class Media {
     public id: string;
     public location: {
         lat: number,
-        lng: number
+        lng: number,
+        type: number // 0 - by GPS device, 1 - manual correction, 2 - manual
     };
-    public type: number;
+    public type: number; // 0-photo, 1-video, 3-audio
+    public txid: string; // location + timestamp + hash
     public url: number;
-    public hash: string;
     public cost: number;
     public owner: string;
-    public neuro: string[];
-    public show: boolean;
-    public draggable: boolean;
+    public deviceType: number; // 0 - local, 1 - remote(ip-webcam)
+    public direction: {
+        horizont: number,
+        vertical: number
+    };
+    public description: string;
+    public neuro: Array<string>;
     public iconUrl: string;
-    public label: string;
+    public local: boolean;
+    public draggable: boolean;
+    public opacity: number;
 }
 export class People {
     public location: {
