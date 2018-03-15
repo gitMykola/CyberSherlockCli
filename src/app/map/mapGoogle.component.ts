@@ -1,6 +1,6 @@
 import {
     AfterViewChecked,
-    Component
+    Component, OnInit
 } from '@angular/core';
 import {
     InfoMonitor,
@@ -11,6 +11,7 @@ import {
     UserService
 } from '../_services';
 import * as $ from 'jquery';
+import {config} from "../config";
 @Component ({
     selector: 'app-map',
     template: `<div class="slide-container" id="map">
@@ -31,19 +32,29 @@ import * as $ from 'jquery';
                     (markerClick)="mediaMarkerClick(k)"
                     (dragEnd)="mapClick($event)"
                     [opacity]="m.opacity">
-                <agm-info-window>
+                <agm-info-window *ngIf="!m.local">
                     <img [src]="m.url" height="72" width="128">
+                </agm-info-window>
+            </agm-marker>
+            <agm-marker [latitude]="map.lat"
+                        [longitude]="map.lng"
+                        [markerClickable]="true"
+                        (markerClick)="user.gAuth()"
+                        [iconUrl]="map.iconUrl">
+                <agm-info-window>
+                    <p>Map center</p>
                 </agm-info-window>
             </agm-marker>
         </agm-map>
         <app-dash (onAction)="onAction($event)"></app-dash>
     </div>`
 })
-export class MapGoogleComponent implements AfterViewChecked {
+export class MapGoogleComponent implements OnInit, AfterViewChecked {
     public map: {
         lat: number,
         lng: number,
-        zoom: number
+        zoom: number,
+        iconUrl: string
     };
     public mediaHide: boolean;
     public taskHide: boolean;
@@ -56,12 +67,35 @@ export class MapGoogleComponent implements AfterViewChecked {
         public media: MediaService,
         public people: PeopleService
     ) {
-        this.map = {
-            lat: 46.4325695,
-            lng: 30.7426535,
-            zoom: 18
-        };
+        this.map = Object.assign(config().app.map.default_sets);
         this.mediaHide = this.taskHide = this.peopleHide = false;
+    }
+    ngOnInit () {
+        this.setMapCenter();
+        /*navigator.mediaDevices.getUserMedia({video: true})
+            .then(stream => document.querySelector('video').srcObject = stream);
+        navigator.mediaDevices.enumerateDevices()
+            .then(devs => {
+                console.dir(devs);
+            });
+        console.dir(navigator.mediaDevices.getSupportedConstraints());*/
+    }
+    setMapCenter () {
+        /*try {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition( position => {
+                    this.map.lat = position.coords.latitude;
+                    this.map.lng = position.coords.longitude;
+                    this.map.zoom = 18;
+                }, error => {
+                    this._im.add(this.ts.translate('info.manual_location'), 1);
+                });
+            } else {
+                this._im.add(this.ts.translate('info.manual_location'), 1);
+            }
+        } catch (e) {
+            this._im.add(e, 2);
+        }*/
     }
     ngAfterViewChecked () {
         const h = window.innerHeight,
@@ -104,14 +138,14 @@ export class MapGoogleComponent implements AfterViewChecked {
                     lat: this.map.lat,
                     lng: this.map.lng
                 },
+                local: true,
                 draggable: true,
                 iconUrl: '../../assets/img/icons/mapGPS/task_new_photo_.png',
                 url: '../../assets/img/odessa.png',
                 opacity: 1
             })
                 .then(() => {
-                    this
-                        ._im.add(this.ts.translate('info.done'), 0);
+                    this._im.add(this.ts.translate('info.done'), 0);
                     console.dir(this.media.medias);
                 })
                 .catch(e => this

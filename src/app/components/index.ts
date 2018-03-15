@@ -5,3 +5,7 @@ export {DashBoardComponent} from './dashBoard.component';
 export {InfoComponent} from './info.component';
 export {LoginComponent} from './login.component';
 export {TopNavComponent} from './topNav.component';
+export {GoogleLoginComponent} from './googleLogin.component';
+export {FacebookLoginComponent} from './facebookLogin.component';
+export {LinkedLoginComponent} from './linkedLogin.component';
+export {TwitterLoginComponent} from './twitterLogin.component';

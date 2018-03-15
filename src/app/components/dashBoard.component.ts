@@ -48,8 +48,8 @@ export class DashBoardComponent {
         this.categories = config().app.dash.categories;
     }
     onAct (act: string) {
-        const action = this.actions.filter(a => a.action === act)[0]; console.log('1');
-        if (action && action.hasOwnProperty('selected')) {console.log('2');
+        const action = this.actions.filter(a => a.action === act)[0];
+        if (action && action.hasOwnProperty('selected')) {
             action.selected = !action.selected;
         }
         this.onAction.emit({

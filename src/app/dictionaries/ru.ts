@@ -11,7 +11,18 @@ export const RU = {
         remove: 'Убрать',
         delete: 'Удалить',
         find: 'Найти',
-        filter: 'Фильтр'
+        filter: 'Фильтр',
+        enter: 'Войти',
+        genesis: 'Создать пользователя',
+        enter_with: 'Войти с ',
+        genesis_with: 'Создать из ',
+        glogin: 'Google',
+        flogin: 'Facebook',
+        tlogin: 'Twitter',
+        llogin: 'LinkedIn',
+        ilogin: 'Instagram',
+        login: 'Логин',
+        create: 'Создать'
     },
     app: {
         title_1: 'КИБЕР ',
@@ -51,7 +62,12 @@ export const RU = {
     err: {
         serverConnectionError: 'Ошибка соединения с сервером.',
         localStorageError: 'Ошибка доступа к локальному хранилищу.',
-        localStorageReadWriteError: 'Ошибка чтения/записи в локальном хранилище.'
+        localStorageReadWriteError: 'Ошибка чтения/записи в локальном хранилище.',
+        email: 'должно быть как nick@gmail.com',
+        phone: 'должно быть как +380939506642',
+        email_or_phone: 'Должен быть email или телефон',
+        passphrase: 'должно быть минимум 8 символов',
+        passphrase_cpass: 'Секретная фраза должна совпадать с подтверждением.'
     },
     room: {
         title: 'Приватная страница'
@@ -74,7 +90,8 @@ export const RU = {
     },
     info: {
         done: 'Сделал',
-        error: 'Ошибка'
+        error: 'Ошибка',
+        manual_location: 'Вы можете устанавливать координаты только в ручном режиме!'
     },
     langs: {
         de: 'Deutsch',

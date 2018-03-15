@@ -20,10 +20,18 @@ export class Media {
         type: number // 0 - by GPS device, 1 - manual correction, 2 - manual
     };
     public type: number; // 0-photo, 1-video, 3-audio
+    public created: number; // Unix timestamp
     public txid: string; // location + timestamp + hash
-    public url: number;
+    public url: string;
     public cost: number;
-    public owner: string;
+    public close: boolean;
+    public owner: {
+        id: string,
+        location: {
+            lat: number,
+            lng: number
+        }
+    };
     public deviceType: number; // 0 - local, 1 - remote(ip-webcam)
     public direction: {
         horizont: number,

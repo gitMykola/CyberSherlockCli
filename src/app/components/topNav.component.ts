@@ -1,5 +1,12 @@
-import {InfoMonitor, TranslatorService} from '../_services';
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {
+    ActionMonitor,
+    InfoMonitor,
+    TranslatorService
+} from '../_services';
+import {
+    AfterViewInit,
+    Component
+} from '@angular/core';
 import {config} from '../config';
 import {UserService} from '../_services';
 
@@ -26,7 +33,8 @@ export class TopNavComponent implements AfterViewInit {
     constructor (
         public ts: TranslatorService,
         public user: UserService,
-        public im: InfoMonitor
+        public im: InfoMonitor,
+        private _am: ActionMonitor
     ) {
         this._menu = config().app.topnav;
     }
@@ -35,7 +43,43 @@ export class TopNavComponent implements AfterViewInit {
     }
     action (e: Event, name: string) {
         e.preventDefault();
-        this.user.authen(name);
+       // this.user.authen(name);
         this.im.add(name, 0);
+        this._am.onAction$.emit({
+            action: name
+        });
+    }
+    enter () {
+        const script = document.createElement('script');
+        script.async = true;
+        script.defer = true;
+        script.src = 'https://apis.google.com/js/api.js';
+        script.addEventListener('load', () => {
+            console.log('load');
+            const w: any = window,
+            gapi = w.gapi;
+            console.dir(gapi);
+            gapi.load('client:auth2', () => {
+                console.dir(gapi);
+                gapi.client.init({
+                    apiKey: config().app.google.apiKey,
+                    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+                    clientId: config().app.google.clientId,
+                    scope: 'profile'
+                })
+                    .then(() => {
+                        const GoogleAuth = gapi.auth2.getAuthInstance();
+                        GoogleAuth.isSignedIn.listen();
+                        if (!GoogleAuth.isSignedIn.get()) {
+                            GoogleAuth.signIn();
+                        }
+                        const user = GoogleAuth.currentUser.get();
+                        console.dir(user);
+                        console.dir(gapi);
+                    })
+                    .catch(err => this.im.add(err, 2));
+            });
+        });
+        document.body.appendChild(script);
     }
 }

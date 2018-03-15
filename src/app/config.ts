@@ -3,7 +3,12 @@ export function config() {
         app: {
             default_lang: 'EN',
             facebook: {},
-            google: {},
+            google: {
+                apiKey: 'AIzaSyCQqiOB_uS2YEbV5d9vsPUpb4s5VavxulQ',
+                clientId: '614754642660-hhpv7vv258h3f4h55uavv5glnhb46ctu.apps.googleusercontent.com',
+                clientSecret: '460dDbvoTichx4JLr4E_RDse',
+                scopes: 'profile'
+            },
             linked: {},
             twitter: {},
             topnav: [
@@ -99,6 +104,14 @@ export function config() {
                         selected: false
                     }
                 ]
+            },
+            map: {
+                default_sets: {
+                    lat: 46.43192571103273,
+                    lng: 30.742602070500197,
+                    zoom: 18,
+                    iconUrl: '../../assets/img/icons/mapGPS/center_32.png'
+                }
             }
         },
         dev: {

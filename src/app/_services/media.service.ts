@@ -48,6 +48,9 @@ export class MediaService {
                             },
                             opacity: (value) => {
                                 return typeof (value) === 'number' && [0, 1].indexOf(value) > 0;
+                            },
+                            local: (value) => {
+                                return typeof (value) === 'boolean';
                             }
                         },
                         keys = Object.keys(data);

@@ -36,7 +36,43 @@ html {
       bottom: 60px;
       right: 0;
       flex-direction: column;
-    }
+    };
+    .login-form {
+      .form-block {
+        span {
+          padding: 0;
+        };
+        button {
+          .element-dark-transparent;
+          margin: 3px 0;
+        };
+        label {
+          .element-dark-transparent;
+          margin-bottom: 0;
+          padding: 0;
+          &:hover {
+            background: transparent;
+          }
+        };
+        input {
+          margin-top: 0;
+          padding: 0 3px;
+          border: none;
+          border-radius: 2px;
+        };
+        .select-btn {
+          border: none;
+        };
+        .active {
+          background: @color_main_transparent_super;
+          border-top: 1px solid @color_main_superlight;
+          border-bottom: 1px solid @color_main_superlight;
+        }
+      };
+      .button-block {
+        padding-top: 15px;
+      };
+    };
   }
 }
 @media screen and (max-width: 768px) {

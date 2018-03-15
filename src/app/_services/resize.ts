@@ -3,7 +3,6 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable()
 export class ResizeService {
-
     public onResize$ = new EventEmitter<{ width: number; height: number; }>();
     public onLoad$ = new EventEmitter<{ width: number; height: number; }>();
     public onOrientationChange$ = new EventEmitter<{ width: number; height: number; }>();

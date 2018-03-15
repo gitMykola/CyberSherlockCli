@@ -11,7 +11,18 @@ export const EN = {
         remove: 'Remove',
         delete: 'Delete',
         find: 'Find',
-        filter: 'Filter'
+        filter: 'Filter',
+        enter: 'Login',
+        genesis: 'Create user',
+        enter_with: 'Login with ',
+        genesis_with: 'Create with ',
+        glogin: 'Google',
+        flogin: 'Facebook',
+        tlogin: 'Twitter',
+        llogin: 'LinkedIn',
+        ilogin: 'Instagram',
+        login: 'Login',
+        create: 'Create'
     },
     app: {
         title_1: 'CYBER ',
@@ -22,7 +33,7 @@ export const EN = {
         email: 'Email',
         phone: 'Phone',
         passphrase: 'Passphrase',
-        cpass: 'Confirm passphrase',
+        cpassphrase: 'Confirm passphrase',
         date: 'Date',
         time: 'Time',
         sender: 'Sender',
@@ -51,7 +62,12 @@ export const EN = {
     err: {
         serverConnectionError: 'Connection server error.',
         localStorageError: 'Local Storage access error.',
-        localStorageReadWriteError: 'Local Storage read/write error.'
+        localStorageReadWriteError: 'Local Storage read/write error.',
+        email: 'should be like nick@gmail.com',
+        phone: 'should be like +380939506642',
+        email_or_phone: 'Should be email or phone',
+        passphrase: 'should ba at least 8 charactrs',
+        passphrase_cpass: 'Passphrase not equal confirmed passphrase.'
     },
     room: {
         title: 'Private room'
@@ -76,7 +92,8 @@ export const EN = {
     },
     info: {
         done: 'Done',
-        error: 'Error'
+        error: 'Error',
+        manual_location: 'You can set location in manual mode only!'
     },
     langs: {
         de: 'Deutsch',

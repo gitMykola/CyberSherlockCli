@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
-import {InfoMonitor, TranslatorService} from '../_services';
+import {InfoMonitor, ResizeService, TranslatorService} from '../_services';
 import {Info, DT} from '../_services/elements';
 import {animate, state, style, transition, trigger, useAnimation} from '@angular/animations';
 import {anim} from './animations';
@@ -23,6 +23,7 @@ import * as $ from 'jquery';
             left: 0;
             padding: 0;
             opacity: 0;
+            z-index: 1001;
         }
         #last-info p {
             font-size: 25px;
@@ -30,8 +31,8 @@ import * as $ from 'jquery';
     `],
     animations: [
         trigger('last', [
-            state('false', style({opacity: 0})),
-            state('true', style({opacity: 1})),
+            state('false', style({display: 'none', opacity: 0})),
+            state('true', style({display: 'block', opacity: 1})),
             transition('false => true', animate(500)),
             transition('true => false', animate(500))
         ])
@@ -39,10 +40,11 @@ import * as $ from 'jquery';
 })
 export class LastInfoComponent implements OnInit, OnDestroy, AfterViewChecked {
     private _newInfo: Subscription;
-    private timer: any;
+    private _timer: any;
     public lastInfo: Info;
     public show: boolean;
     constructor (
+        private _rs: ResizeService,
         public im: InfoMonitor,
         public ts: TranslatorService
     ) {
@@ -60,14 +62,22 @@ export class LastInfoComponent implements OnInit, OnDestroy, AfterViewChecked {
     showInfo (data) {
         this.lastInfo = data;
         this.show = true;
-        this.timer = null;
-        this.timer = setTimeout(() => this.show = false, 7000);
+        this._timer = null;
+        this._timer = setTimeout(() => this.show = false, 7000);
     }
     ngAfterViewChecked () {
-        const lastInfoDom = document.querySelector('#last-info');
-        const h = window.innerHeight - (lastInfoDom.clientHeight + 10);
-        if ($(lastInfoDom).css('top') !== h) {
-            $(lastInfoDom).css('top', h + 'px');
+        this._setDom();
+    }
+    _setDom () {
+        try {
+            const lastInfoDom = document.querySelector('#last-info');
+            const h = window.innerHeight - ((lastInfoDom.clientHeight || 102) + 10);
+            if ($(lastInfoDom).css('top')
+                !== h + window.scrollY) {
+                $(lastInfoDom).css('top', h + window.scrollY + 'px');
+            }
+        } catch (e) {
+            this.im.add(e, 2);
         }
     }
 }

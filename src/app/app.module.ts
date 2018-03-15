@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {
+    ActionMonitor,
     InfoMonitor,
     MediaService,
     PeopleService,
@@ -25,7 +26,11 @@ import {
     InfoComponent,
     LastInfoComponent,
     LoginComponent,
-    TopNavComponent
+    TopNavComponent,
+    GoogleLoginComponent,
+    FacebookLoginComponent,
+    TwitterLoginComponent,
+    LinkedLoginComponent
 } from './components' ;
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -33,6 +38,8 @@ import {
     GoogleMapsAPIWrapper,
     MarkerManager
 } from '@agm/core';
+import {HttpClientModule} from '@angular/common/http';
+import {JsonpModule} from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -50,20 +57,27 @@ import {
       HmComponent,
       RoomComponent,
       AuthorComponent,
-      DashBoardComponent
+      DashBoardComponent,
+      GoogleLoginComponent,
+      FacebookLoginComponent,
+      LinkedLoginComponent,
+      TwitterLoginComponent
   ],
   imports: [
     BrowserModule,
       BrowserAnimationsModule,
       routing,
       AgmCoreModule.forRoot({
-        apiKey: 'AIzaSyAGoK2EXOHJsdq4yb7Hsz-_pKrZVEGmAh4'
-      })
+        apiKey: 'AIzaSyCQqiOB_uS2YEbV5d9vsPUpb4s5VavxulQ'
+      }),
+      HttpClientModule,
+      JsonpModule
   ],
   providers: [
       TranslatorService,
       UserService,
       InfoMonitor,
+      ActionMonitor,
       ResizeService,
       TaskService,
       MediaService,
