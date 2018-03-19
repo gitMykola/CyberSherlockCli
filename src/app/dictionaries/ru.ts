@@ -22,6 +22,7 @@ export const RU = {
         llogin: 'LinkedIn',
         ilogin: 'Instagram',
         login: 'Логин',
+        logout: 'Выйти',
         create: 'Создать'
     },
     app: {
@@ -67,7 +68,8 @@ export const RU = {
         phone: 'должно быть как +380939506642',
         email_or_phone: 'Должен быть email или телефон',
         passphrase: 'должно быть минимум 8 символов',
-        passphrase_cpass: 'Секретная фраза должна совпадать с подтверждением.'
+        passphrase_cpass: 'Секретная фраза должна совпадать с подтверждением.',
+        no_matсhes: 'Нет совпадений.'
     },
     room: {
         title: 'Приватная страница'
@@ -91,7 +93,8 @@ export const RU = {
     info: {
         done: 'Сделал',
         error: 'Ошибка',
-        manual_location: 'Вы можете устанавливать координаты только в ручном режиме!'
+        manual_location: 'Вы можете устанавливать координаты только в ручном режиме!',
+        logout: 'Вы собираетесь выйти из системы?'
     },
     langs: {
         de: 'Deutsch',

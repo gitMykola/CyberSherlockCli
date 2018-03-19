@@ -17,8 +17,8 @@ import {UserService} from '../_services';
       <li class="nav-item" *ngFor="let item of _menu index as i"
           routerLinkActive="active"
           [hidden]="item.disabled
-          || (item.name === 'exit' && !user.auth)
-          || (item.name === 'enter' && user.auth)">
+          || (item.name === 'exit' && !user.user.auth)
+          || (item.name === 'enter' && user.user.auth)">
         <a class="nav-link" (click)="action($event, item.name)"
            routerLink="{{item.name}}">
             <span class="material-icons">{{item.icon}}</span>
@@ -45,9 +45,11 @@ export class TopNavComponent implements AfterViewInit {
         e.preventDefault();
        // this.user.authen(name);
         this.im.add(name, 0);
-        this._am.onAction$.emit({
-            action: name
-        });
+        // if (name === 'exit') {
+        //    this.user.userLogout();
+        // } else {
+            this._am.onAction$.emit(name);
+        // }
     }
     enter () {
         const script = document.createElement('script');

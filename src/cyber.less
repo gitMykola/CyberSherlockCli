@@ -39,8 +39,9 @@ html {
     };
     .login-form {
       .form-block {
-        span {
-          padding: 0;
+        h3 {
+          color: @color_main_light;
+          padding: 30px 2px;
         };
         button {
           .element-dark-transparent;
@@ -60,6 +61,9 @@ html {
           border: none;
           border-radius: 2px;
         };
+        span {
+          padding: 0;
+        };
         .select-btn {
           border: none;
         };
@@ -72,6 +76,10 @@ html {
       .button-block {
         padding-top: 15px;
       };
+    };
+    .logout-form {
+      padding-top: 200px;
+      .login-form;
     };
   }
 }

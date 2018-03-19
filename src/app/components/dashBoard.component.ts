@@ -9,7 +9,7 @@ import {config} from '../config';
             <div class="dash-block">
                 <span *ngFor="let action of actions">
                     <button class="dash-item  {{+ action.selected ? 'active' : ''}}"
-                            *ngIf="!action.auth || user.auth"
+                            *ngIf="!action.auth || user.user.auth"
                             title="{{ts.translate('actions.' + action.action)}}"
                             (click)="onAct(action.action)">
                     <span class="material-icons">{{action.icon}}</span>
@@ -20,7 +20,7 @@ import {config} from '../config';
             <div class="dash-block">
                 <span *ngFor="let category of categories; index as i">
                     <button class="dash-item {{+ category.selected ? 'active' : ''}}"
-                            *ngIf="!category.auth || user.auth"
+                            *ngIf="!category.auth || user.user.auth"
                             title="{{ts.translate('labels.' + category.name)}}"
                             (click)="selectCategory(i)">
                     <span class="material-icons">{{category.icon}}</span>

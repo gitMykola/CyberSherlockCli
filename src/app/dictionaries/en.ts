@@ -22,6 +22,7 @@ export const EN = {
         llogin: 'LinkedIn',
         ilogin: 'Instagram',
         login: 'Login',
+        logout: 'Logout',
         create: 'Create'
     },
     app: {
@@ -67,7 +68,8 @@ export const EN = {
         phone: 'should be like +380939506642',
         email_or_phone: 'Should be email or phone',
         passphrase: 'should ba at least 8 charactrs',
-        passphrase_cpass: 'Passphrase not equal confirmed passphrase.'
+        passphrase_cpass: 'Passphrase not equal confirmed passphrase.',
+        no_matches: 'No matches.'
     },
     room: {
         title: 'Private room'
@@ -93,7 +95,8 @@ export const EN = {
     info: {
         done: 'Done',
         error: 'Error',
-        manual_location: 'You can set location in manual mode only!'
+        manual_location: 'You can set location in manual mode only!',
+        logout: 'Are you going to logout?'
     },
     langs: {
         de: 'Deutsch',

@@ -3,7 +3,6 @@ import {ActionMonitor, InfoMonitor, TranslatorService, UserService} from '../_se
 import {anim} from './animations';
 import {state, style, transition, trigger, useAnimation} from '@angular/animations';
 import {Subscription} from 'rxjs/Subscription';
-import {_localeFactory} from "@angular/core/src/application_module";
 
 @Component({
     selector: 'app-login',
@@ -42,7 +41,7 @@ import {_localeFactory} from "@angular/core/src/application_module";
                            (input)="showValidateFormFieldError($event.target)"
                            (change)="showValidateFormFieldError($event.target, 1)"/>
                 </div>
-                <div class="form-block flex-column">
+                <div [@ln]="lin" class="form-block flex-column">
                     <label for="phone">
                         {{ts.translate('labels.phone')}}
                     </label>
@@ -62,7 +61,7 @@ import {_localeFactory} from "@angular/core/src/application_module";
                     <label for="cpassphrase">
                         {{ts.translate('labels.cpassphrase')}}
                     </label>
-                    <input type="password" name="cpassphrase" *ngIf="!lin"
+                    <input type="password" name="cpassphrase"
                            (input)="showValidateFormFieldError($event.target)"
                            (change)="showValidateFormFieldError($event.target, 1)"/>
                 </div>
@@ -80,9 +79,46 @@ import {_localeFactory} from "@angular/core/src/application_module";
                 </div>
             </form>
         </div>
+        <div [@logout]="showLogout"
+                    class="modal-block">
+            <form class="form logout-form
+                        col-sm-6 offset-sm-3
+                        col-lg-4 offset-lg-4" id="logoutForm">
+                <div class="form-block button-block text-center">
+                    <h3>{{ts.translate('info.logout')}}
+                    </h3>
+                </div>
+                <div class="form-block flex-row">
+                    <span class="col-6 text-center">
+                        <button class="col-8"
+                                (click)="showLogout = false">
+                            {{ts.translate('buttons.cancel')}}
+                        </button>
+                    </span>
+                    <span class="col-6 text-center">
+                        <button class="col-8"
+                                (click)="logout($event)">
+                            {{ts.translate('buttons.logout')}}
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
     `,
     animations: [
         trigger('login', [
+            state('false', style({display: 'none', opacity: 0})),
+            state('true', style({display: 'block', opacity: 1})),
+            transition('false => true', useAnimation(anim.fadeIn,
+                {params: {
+                        time: 300
+                    }})),
+            transition('true => false', useAnimation(anim.fadeOut,
+                {params: {
+                        time: 300
+                    }}))
+        ]),
+        trigger('logout', [
             state('false', style({display: 'none', opacity: 0})),
             state('true', style({display: 'block', opacity: 1})),
             transition('false => true', useAnimation(anim.fadeIn,
@@ -111,6 +147,7 @@ import {_localeFactory} from "@angular/core/src/application_module";
 export class LoginComponent implements OnInit, OnDestroy {
     public lin: boolean;
     public show: boolean;
+    public showLogout: boolean;
     private _action: Subscription;
     private _loginForm: any;
     constructor (
@@ -119,13 +156,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         private _am: ActionMonitor,
         private _user: UserService,
     ) {
-        this.show = false;
+        this.show = this.showLogout = false;
         this.lin = true;
     }
     ngOnInit () {
         this._action = this._am.onAction$
             .subscribe(action => {
-                return action.action === 'enter' ? this.loginAction() : null;
+                return action === 'enter' ? this.loginAction() :
+                    action === 'exit' ? this.showLogout = true : null;
             });
         this._loginForm = document.querySelector('#loginForm');
     }
@@ -143,6 +181,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     showValidateFormFieldError (target: any, showError: boolean = false) {
         const tElement = target.previousElementSibling;
+        if (target.name === 'email' && target.value.match(/(^\+\d+$)|(\d+$)/) !== null) {
+            target = {
+                name: 'phone',
+                value: target.value
+            };
+        }
         if (!this.validateField(target)) {
             // $(target.previousElementSibling).css({color: this._styles.errorColor});
             tElement.className = (tElement.className.indexOf(' error-form-field') < 0) ?
@@ -186,56 +230,97 @@ export class LoginComponent implements OnInit, OnDestroy {
         };
         return valid[target.name] ? valid[target.name](target.value) : false;
     }
-    formValidate (form) {
+    formValidate (form, ln) {
         return new Promise( (resolve, reject) => {
             try {
-                const fields = form.getElementsByTagName('input');
-                let emph = false, ps, cps;
-                for (let i = 0; i < fields.length; i++) {
-                    if (!fields.item(i).disabled && !this.validateField(fields.item(i))) {
-                        reject(fields.item(i));
+                const fields = form.getElementsByTagName('input'),
+                    emlPhn = form.querySelector('input[name=email]');
+                if (ln) {
+                    if (emlPhn.value.match(/(^\+\d+$)|(\d+$)/) !== null)
+                    {
+                        const field = {
+                                name: 'phone',
+                                value: emlPhn.value
+                            },
+                            pass = form.querySelector('input[name=passphrase]');
+                        if (!this.validateField(field)) {
+                            return reject(field);
+                        }
+                        if (pass && !this.validateField(pass)) {
+                            return reject(pass);
+                        }
+                    } else {
+                        const field = {
+                                name: 'email',
+                                value: emlPhn.value
+                            },
+                            pass = form.querySelector('input[name=passphrase]');
+                        if (!this.validateField(field)) {
+                            return reject(field);
+                        }
+                        if (pass && !this.validateField(pass)) {
+                            return reject(pass);
+                        }
                     }
-                    if ((fields.item(i).name === 'email' && fields.item(i).value.length)
-                        || (fields.item(i).name === 'phone' && fields.item(i).value.length)) {
-                        emph = true;
+                } else {
+                    let emph = false, ps, cps;
+                    for (let i = 0; i < fields.length; i++) {console.dir(fields.item(i));
+                        if (!fields.item(i).disabled && !this.validateField(fields.item(i))) {
+                            return reject(fields.item(i));
+                        }
+                        if ((fields.item(i).name === 'email' && fields.item(i).value.length)
+                            || (fields.item(i).name === 'phone' && fields.item(i).value.length)) {
+                            emph = true;
+                        }
+                        if (fields.item(i).name === 'passphrase') {
+                            ps = fields.item(i);
+                        }
+                        if (fields.item(i).name === 'cpassphrase') {
+                            cps = fields.item(i);
+                        }
                     }
-                    if (fields.item(i).name === 'passphrase') {
-                        ps = fields.item(i);
+                    if (!emph) {
+                        return reject(emph);
                     }
-                    if (fields.item(i).name === 'cpassphrase') {
-                        cps = fields.item(i);
+                    if (cps && ps.value !== cps.value) {
+                        return reject(cps);
                     }
                 }
-                if (!emph) {
-                    reject(emph);
-                }
-                if (cps && ps.value !== cps.value) {
-                    reject(cps);
-                }
-                resolve();
+                return resolve();
             } catch (e) {
-                reject(e);
+                return reject(e);
             }
         });
     }
     localLogin (e: Event) {
-        e.preventDefault();
-        // this.im.add(this.lin ? 'login' : 'create', 0);
         try {
-            this.formValidate(this._loginForm)
-                .then(() => {console.dir('Ok');
-                    this.im.add('Server send', 0);
-                    console.dir(this._loginForm.email);
-                    this._user.createLocalUser({
-                        passphrase: this._loginForm.passphrase.value,
-                        email: this._loginForm.email.value,
-                        phone: this._loginForm.phone.value
-                    })
-                        .then(user => {
-                            console.dir(user);
-                        }).catch(err => {
-                            console.dir(err);
-                    });
+            e.preventDefault();
+            this.formValidate(this._loginForm, this.lin)
+                .then(() => {
+                    const data: any = {
+                        passphrase: this._loginForm.passphrase.value
+                    };
+                    if (this.lin) {
+                        if (this._loginForm.email.value.match(/^\+\d{12}$/) !== null) {
+                            data.phone = this._loginForm.email.value;
+                        } else {
+                            data.email = this._loginForm.email.value;
+                        }
+                        return this._user.loginLocalUser(data);
+                    } else {
+                        data.email = this._loginForm.email.value;
+                        data.phone = this._loginForm.phone.value;
+                        return this._user.createLocalUser(data);
+                    }
+                })
+                .then(user => {
+                    if (!user) {
+                        const error = 'User service error.';
+                        this.im.add(error, 2);
+                        return Promise.reject(error);
+                    } else {
+                        this.show = false;
+                    }
                 })
                 .catch(err => {console.dir(err);
                     if (err === false) {
@@ -244,6 +329,9 @@ export class LoginComponent implements OnInit, OnDestroy {
                     } else if (err.name === 'cpassphrase') {
                         this.im.add(this.ts
                             .translate('err.passphrase_cpass') , 2);
+                    } else if (err.response.data.error.message === 'No matches.') {
+                        this.im.add(this.ts
+                            .translate('err.no_matches'), 2);
                     } else {
                         this.im.add(err.name || err, 2);
                     }
@@ -251,5 +339,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         } catch (e) {
             this.im.add(e, 2);
         }
+    }
+    logout (e: Event) {
+        e.preventDefault();
+        this._user.userLogout();
+        this.showLogout = false;
     }
 }

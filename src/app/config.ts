@@ -1,6 +1,9 @@
 export function config() {
     return {
         app: {
+            name: 'Cyber Sherlock',
+            url_client: 'http://localhost:4201',
+            url_server: 'http://localhost:3080',
             default_lang: 'EN',
             facebook: {},
             google: {

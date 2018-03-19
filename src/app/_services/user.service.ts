@@ -1,21 +1,35 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Injectable, OnDestroy, OnInit} from '@angular/core';
 import {config} from '../config';
-import {Jsonp} from '@angular/http';
 import axios from 'axios';
 
 @Injectable()
 export class UserService {
-    public auth: boolean;
+    public user: {
+        auth: boolean,
+        id: string,
+        email: string,
+        phone: string
+    };
     private _config: any;
+    private _axios: any;
     constructor (
-        private http: HttpClient
     ) {
-        this.auth = false;
-        this._config = config().app.google;
+        this._userSet();
+        this.user.auth = false;
+        this._config = config();
+        this._axios = axios;
     }
-    public authen (act: string) {
-        this.auth = act === 'enter';
+    private _userSet(data?: any) {
+        this.user = {
+            id: data && data.id || '',
+            email: data && data.email || '',
+            phone: data && data.phone || '',
+            auth: false
+        };
+        return true;
+    }
+    public userLogout () {
+        return this.user.auth ? this._userSet() : false;
     }
     public gAuth () {
         /*ax({
@@ -43,24 +57,20 @@ export class UserService {
     }
     public createLocalUser (data: any) {
         return new Promise((resolve, reject) => {
-            const params = [];
-            params.push(data.passphrase);
-            params.push(data.email);
-            params.push(data.phone);
-             console.dir(params);
             try {
-                axios({
-                    method: 'post',
-                    url: 'http://localhost:3080',
-                    data: {
-                        jsonrpc: '2.0',
-                        method: 'user_create_local',
-                        params: params,
-                        id: 144
-                    }
-                })
+                const params = [];
+                params.push(data.passphrase);
+                params.push(data.email);
+                params.push(data.phone);
+                axios('user_create_local', params)
                     .then(response => {
-                    return resolve(response);
+                        if (response['result'].user) {
+                            this._userSet(response['result'].user);
+                            this.user.auth = true;
+                            return resolve(true);
+                        } else {
+                            return reject('User service error.');
+                        }
                 })
                     .catch(err => {
                     return reject(err);
@@ -68,6 +78,56 @@ export class UserService {
             } catch (e) {
                 return reject(e);
             }
+        });
+    }
+    public loginLocalUser (data: any) {
+        return new Promise((resolve, reject) => {
+            try {
+                const params = [];
+                const rpc_method = data.email && data.email.length > 0 ?
+                    'auth_local_email' : 'auth_local_phone';
+                params.push(data.passphrase);
+                params.push(rpc_method === 'auth_local_email' ? data.email : data.phone);
+                this._ax(rpc_method, params)
+                    .then(response => {
+                        if (response['result'].user) {
+                            this._userSet(response['result'].user);
+                            this.user.auth = true;
+                            return resolve(true);
+                        } else {
+                            return reject('User service error.');
+                        }
+                    })
+                    .catch(err => {
+                        return reject(err);
+                    });
+            } catch (e) {
+                return reject(e);
+            }
+        });
+    }
+    private _ax (method: string, params: any) {
+        return new Promise( (resolve, reject) => {
+            axios({
+                method: 'post',
+                url: this._config.app.url_server,
+                data: {
+                    jsonrpc: '2.0',
+                    method: method,
+                    params: params,
+                    id: 144
+                }
+            })
+                .then(response => {
+                    if (response.data) {
+                        return resolve(response.data);
+                    } else {
+                        return reject('User service error.');
+                    }
+                })
+                .catch(err => {
+                    return reject(err);
+                });
         });
     }
 }
