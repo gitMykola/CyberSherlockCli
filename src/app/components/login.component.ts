@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActionMonitor, InfoMonitor, TranslatorService, UserService} from '../_services';
 import {anim} from './animations';
 import {state, style, transition, trigger, useAnimation} from '@angular/animations';
@@ -15,7 +15,7 @@ import {Subscription} from 'rxjs/Subscription';
                 <div class="form-block">
                     <button class="form-close"
                             title="{{ts.translate('buttons.close')}}"
-                            (click)="show = false">
+                            (click)="loginCancel($event)">
                         <span class="material-icons">
                             exit_to_app
                         </span>
@@ -35,7 +35,7 @@ import {Subscription} from 'rxjs/Subscription';
                 </div>
                 <div class="form-block flex-column">
                     <label for="email" class="col-12">
-                        {{ts.translate('labels.email')}}
+                        {{ts.translate(lin ? 'labels.email_phone' : 'labels.email')}}
                     </label>
                     <input type="text" name="email"
                            (input)="showValidateFormFieldError($event.target)"
@@ -72,7 +72,7 @@ import {Subscription} from 'rxjs/Subscription';
                     </button>
                 </div>
                 <div class="form-block button-block social-block flex-column">
-                    <app-glogin [lin]="lin"></app-glogin>
+                    <app-glogin [lin]="lin" (onGoogle)="googleLogin($event)"></app-glogin>
                     <app-flogin [lin]="lin"></app-flogin>
                     <app-llogin [lin]="lin"></app-llogin>
                     <app-tlogin [lin]="lin"></app-tlogin>
@@ -236,8 +236,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 const fields = form.getElementsByTagName('input'),
                     emlPhn = form.querySelector('input[name=email]');
                 if (ln) {
-                    if (emlPhn.value.match(/(^\+\d+$)|(\d+$)/) !== null)
-                    {
+                    if (emlPhn.value.match(/(^\+\d+$)|(\d+$)/) !== null) {
                         const field = {
                                 name: 'phone',
                                 value: emlPhn.value
@@ -292,6 +291,19 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
     }
+    formReset (form) {
+        return new Promise((resolve, reject) => {
+            try {
+                const fields = form.querySelectorAll('input');
+                for (let i = 0; i < fields.length; i++) {
+                    fields.item(i).value = null;
+                }
+                return resolve(true);
+            } catch (e) {
+                return reject(e);
+            }
+        });
+    }
     localLogin (e: Event) {
         try {
             e.preventDefault();
@@ -320,29 +332,102 @@ export class LoginComponent implements OnInit, OnDestroy {
                         return Promise.reject(error);
                     } else {
                         this.show = false;
+                        const msg = this.ts.translate('info.welcome') + ' '
+                            + this._user.user.name;
+                        this.im.add(msg, 0);
+                        return this.formReset(this._loginForm);
                     }
                 })
-                .catch(err => {console.dir(err);
-                    if (err === false) {
-                        this.im.add(this.ts
-                            .translate('err.email_or_phone') , 2);
-                    } else if (err.name === 'cpassphrase') {
-                        this.im.add(this.ts
-                            .translate('err.passphrase_cpass') , 2);
-                    } else if (err.response.data.error.message === 'No matches.') {
-                        this.im.add(this.ts
-                            .translate('err.no_matches'), 2);
-                    } else {
-                        this.im.add(err.name || err, 2);
-                    }
+                .then(reset => {
+                    return reset;
+                })
+                .catch(err => {
+                    let errorMsg = err;
+                    if (err === false) { errorMsg = 'email_or_phone'; }
+                    if (err.name) { errorMsg = err.name; }
+                    if (err.name === 'cpassphrase') { errorMsg = 'passphrase_cpass'; }
+                    this.im.add(this.ts
+                            .translate('err.' + errorMsg || 'server_error') , 2);
                 });
         } catch (e) {
             this.im.add(e, 2);
+        }
+    }
+    googleLogin (g_user: Object) {
+        try {
+            console.dir(g_user);
+            const self = this;
+            if (!g_user['g_status']) {
+                self.im.add(this.ts
+                    .translate('error.google'), 2);
+            } else {
+                if (self.lin) {
+                    self._user.loginGoogleUser(g_user)
+                        .then(user => {
+                            if (!user) {
+                                const error = 'User service error.';
+                                self.im.add(error, 2);
+                                return Promise.reject(error);
+                            } else {
+                                self._loginForm.querySelector('.form-close').click();
+                                self.show = false;
+                                const msg = self.ts.translate('info.welcome') + ' '
+                                    + self._user.user.name;
+                                self.im.add(msg, 0);
+                                return self.formReset(self._loginForm);
+                            }
+                        })
+                        .then(reset => {
+                            return reset;
+                        })
+                        .catch(err => {console.dir(err);
+                            const errorMsg = err; self.im.add('Error', 2);
+                            self.im.add(self.ts
+                                .translate('err.' + errorMsg || 'server_error') , 2);
+                        });
+                } else {
+                    self._user.createGoogleUser(g_user)
+                        .then(user => {
+                            if (!user) {
+                                const error = 'User service error.';
+                                self.im.add(error, 2);
+                                return Promise.reject(error);
+                            } else {
+                                self.show = false;
+                                const msg = self.ts.translate('info.welcome') + ' '
+                                    + self._user.user.name;
+                                self.im.add(msg, 0);
+                                return self.formReset(self._loginForm);
+                            }
+                        })
+                        .then(reset => {
+                            return reset;
+                        })
+                        .catch(err => {console.dir(err);
+                            const errorMsg = err;
+                            self.im.add(self.ts
+                                .translate('err.' + errorMsg || 'server_error') , 2);
+                        });
+                }
+            }
+        } catch (e) {
+            this.im.add(this.ts
+                .translate('error.google') + ' ' + e.message, 2);
         }
     }
     logout (e: Event) {
         e.preventDefault();
         this._user.userLogout();
         this.showLogout = false;
+    }
+    userName(): string {
+        return this._user.user.name;
+    }
+    loginCancel (e: Event) {
+        e.preventDefault();
+        this.formReset(this._loginForm)
+            .then(res => {})
+            .catch(err => this.im.add(err.message, 2));
+        this.show = false;
     }
 }

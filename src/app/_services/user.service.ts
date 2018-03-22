@@ -1,6 +1,7 @@
 import {Injectable, OnDestroy, OnInit} from '@angular/core';
 import {config} from '../config';
 import axios from 'axios';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class UserService {
@@ -8,11 +9,12 @@ export class UserService {
         auth: boolean,
         id: string,
         email: string,
-        phone: string
+        phone: string,
+        name: string
     };
     private _config: any;
     private _axios: any;
-    constructor (
+    constructor (private _http: HttpClient
     ) {
         this._userSet();
         this.user.auth = false;
@@ -24,7 +26,8 @@ export class UserService {
             id: data && data.id || '',
             email: data && data.email || '',
             phone: data && data.phone || '',
-            auth: false
+            auth: false,
+            name: data && (data.name || data.email || data.phone) || ''
         };
         return true;
     }
@@ -62,7 +65,7 @@ export class UserService {
                 params.push(data.passphrase);
                 params.push(data.email);
                 params.push(data.phone);
-                axios('user_create_local', params)
+                this._ax('user_create_local', params)
                     .then(response => {
                         if (response['result'].user) {
                             this._userSet(response['result'].user);
@@ -75,6 +78,32 @@ export class UserService {
                     .catch(err => {
                     return reject(err);
                 });
+            } catch (e) {
+                return reject(e);
+            }
+        });
+    }
+    public createGoogleUser (data: Object) {
+        return new Promise( (resolve, reject) => {
+            try {
+                const params = [];
+                params.push(data['g_id']);
+                params.push(data['g_at']);
+                params.push(data['g_email']);
+                params.push(data['g_name']);
+                this._ax('user_create_google', params)
+                    .then(response => {
+                        if (response['error']) {
+                            return reject(response['error'].code || 'User service error');
+                        } else {
+                            this._userSet(response['result']['user']);
+                            this.user.auth = true;
+                            return resolve(true);
+                        }
+                    })
+                    .catch(err => {
+                        return reject(err);
+                    });
             } catch (e) {
                 return reject(e);
             }
@@ -89,13 +118,39 @@ export class UserService {
                 params.push(data.passphrase);
                 params.push(rpc_method === 'auth_local_email' ? data.email : data.phone);
                 this._ax(rpc_method, params)
-                    .then(response => {
-                        if (response['result'].user) {
-                            this._userSet(response['result'].user);
+                    .then(response => {console.dir(response);
+                        if (response['error']) {
+                            return reject(response['error'].code || 'User service error');
+                        } else {
+                            this._userSet(response['result']['user']);
                             this.user.auth = true;
                             return resolve(true);
+                        }
+                    })
+                    .catch(err => {
+                        return reject(err);
+                    });
+            } catch (e) {
+                return reject(e);
+            }
+        });
+    }
+    public loginGoogleUser (data: Object) {
+        return new Promise( (resolve, reject) => {
+            try {
+                const params = [];
+                params.push(data['g_id']);
+                params.push(data['g_at']);
+                // params.push(data['g_email']);
+                // params.push(data['g_name']);
+                this._ax('auth_google_login', params)
+                    .then(response => {console.dir(response);
+                        if (response['error']) {
+                            return reject(response['error'].code || 'User service error');
                         } else {
-                            return reject('User service error.');
+                            this._userSet(response['result']['user']);
+                            this.user.auth = true;
+                            return resolve(true);
                         }
                     })
                     .catch(err => {
@@ -108,26 +163,26 @@ export class UserService {
     }
     private _ax (method: string, params: any) {
         return new Promise( (resolve, reject) => {
-            axios({
-                method: 'post',
-                url: this._config.app.url_server,
-                data: {
-                    jsonrpc: '2.0',
-                    method: method,
-                    params: params,
-                    id: 144
-                }
-            })
-                .then(response => {
-                    if (response.data) {
-                        return resolve(response.data);
-                    } else {
-                        return reject('User service error.');
-                    }
+            try {
+                axios.post(this._config.app.url_server, {
+                        jsonrpc: '2.0',
+                        method: method,
+                        params: params,
+                        id: 144
                 })
-                .catch(err => {
-                    return reject(err);
-                });
+                    .then(response => {
+                        if (response.data) {
+                            return resolve(response.data);
+                        } else {
+                            return reject('User service error.');
+                        }
+                    })
+                    .catch(err => {console.log(err.message);
+                        return reject(err);
+                    });
+            } catch (e) {
+                return reject(e);
+            }
         });
     }
 }

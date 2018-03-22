@@ -32,6 +32,7 @@ export const RU = {
     },
     labels: {
         email: 'Email',
+        email_phone: 'Email или Номер телефона',
         phone: 'Номер телефона',
         passphrase: 'Секретная фраза',
         cpass: 'Подтверждение секретной фразы',
@@ -61,6 +62,7 @@ export const RU = {
         show_all: 'Показать все'
     },
     err: {
+        server_error: 'Ошибка сервера.',
         serverConnectionError: 'Ошибка соединения с сервером.',
         localStorageError: 'Ошибка доступа к локальному хранилищу.',
         localStorageReadWriteError: 'Ошибка чтения/записи в локальном хранилище.',
@@ -69,7 +71,10 @@ export const RU = {
         email_or_phone: 'Должен быть email или телефон',
         passphrase: 'должно быть минимум 8 символов',
         passphrase_cpass: 'Секретная фраза должна совпадать с подтверждением.',
-        no_matсhes: 'Нет совпадений.'
+        no_matches: 'Нет совпадений.',
+        32605: 'Ошибка сервиса.',
+        32606: 'Нет совпадений.',
+        google: 'Ошибка сервиса Google.'
     },
     room: {
         title: 'Приватная страница'
@@ -94,7 +99,8 @@ export const RU = {
         done: 'Сделал',
         error: 'Ошибка',
         manual_location: 'Вы можете устанавливать координаты только в ручном режиме!',
-        logout: 'Вы собираетесь выйти из системы?'
+        logout: 'Вы собираетесь выйти из системы?',
+        welcome: 'Приветствуем '
     },
     langs: {
         de: 'Deutsch',

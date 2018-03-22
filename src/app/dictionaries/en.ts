@@ -32,6 +32,7 @@ export const EN = {
     },
     labels: {
         email: 'Email',
+        email_phone: 'Email or Phone number',
         phone: 'Phone',
         passphrase: 'Passphrase',
         cpassphrase: 'Confirm passphrase',
@@ -61,6 +62,7 @@ export const EN = {
         show_all: 'Show all'
     },
     err: {
+        server_error: 'Server error',
         serverConnectionError: 'Connection server error.',
         localStorageError: 'Local Storage access error.',
         localStorageReadWriteError: 'Local Storage read/write error.',
@@ -69,7 +71,10 @@ export const EN = {
         email_or_phone: 'Should be email or phone',
         passphrase: 'should ba at least 8 charactrs',
         passphrase_cpass: 'Passphrase not equal confirmed passphrase.',
-        no_matches: 'No matches.'
+        no_matches: 'No matches.',
+        32605: 'Service error',
+        32606: 'No matches',
+        google: 'Google service error.'
     },
     room: {
         title: 'Private room'
@@ -96,7 +101,8 @@ export const EN = {
         done: 'Done',
         error: 'Error',
         manual_location: 'You can set location in manual mode only!',
-        logout: 'Are you going to logout?'
+        logout: 'Are you going to logout?',
+        welcome: 'Welcome ',
     },
     langs: {
         de: 'Deutsch',

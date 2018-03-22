@@ -10,7 +10,8 @@ import * as $ from 'jquery';
     selector: 'app-lastinfo',
     template: `
         <div id="last-info" [@last]="show"
-             class="col-sm-6 offset-sm-3 paragraph-{{ + lastInfo.type === 1 ? 'warning'
+             class="col-sm-8 offset-sm-2 col-md-6 offset-md-3
+                paragraph-{{ + lastInfo.type === 1 ? 'warning'
              : lastInfo.type === 2 ? 'error' : 'info'}}">
             <h6>{{ts.translate(lastInfo.type === 0 ? 'labels.message' :
             lastInfo.type === 1 ? 'labels.warning' : 'labels.error')}}</h6>
@@ -33,8 +34,14 @@ import * as $ from 'jquery';
         trigger('last', [
             state('false', style({display: 'none', opacity: 0})),
             state('true', style({display: 'block', opacity: 1})),
-            transition('false => true', animate(500)),
-            transition('true => false', animate(500))
+            transition('false => true', useAnimation(anim.fadeIn,
+                {params: {
+                        time: 300
+                    }})),
+            transition('true => false', useAnimation(anim.fadeOut,
+                {params: {
+                        time: 300
+                    }}))
         ])
     ]
 })
