@@ -7,26 +7,26 @@ import {config} from '../config';
     template: `
         <div class="dash-board" id="dash-board">
             <div class="dash-block">
-                <span *ngFor="let action of actions">
-                    <button class="dash-item  {{+ action.selected ? 'active' : ''}}"
-                            *ngIf="!action.auth || user.user.auth"
-                            title="{{ts.translate('actions.' + action.action)}}"
-                            (click)="onAct(action.action)">
-                    <span class="material-icons">{{action.icon}}</span>
-                    <span>{{ts.translate('actions.' + action.action)}}</span>
-                </button>
-                </span>
-            </div>
-            <div class="dash-block">
                 <span *ngFor="let category of categories; index as i">
                     <button class="dash-item {{+ category.selected ? 'active' : ''}}"
                             *ngIf="!category.auth || user.user.auth"
                             title="{{ts.translate('labels.' + category.name)}}"
                             (click)="selectCategory(i)">
-                    <span class="material-icons">{{category.icon}}</span>
-                    <span title="{{ts.translate('labels.' + category.name)}}">
+                        <span class="material-icons">{{category.icon}}</span>
+                        <span title="{{ts.translate('labels.' + category.name)}}">
                         {{ts.translate('labels.' + category.name)}}</span>
-                </button>
+                        <div class="dash-block">
+                            <span *ngFor="let action of category.actions">
+                                <button class="dash-item  {{+ action.selected ? 'active' : ''}}"
+                                        *ngIf="!action.auth || user.user.auth"
+                                        title="{{ts.translate('actions.' + action.action)}}"
+                                        (click)="onAct(action.action)">
+                                     <span class="material-icons">{{action.icon}}</span>
+                                    <span>{{ts.translate('actions.' + action.action)}}</span>
+                                </button>
+                            </span>
+                        </div>
+                    </button>
                 </span>
             </div>
         </div>
@@ -44,7 +44,6 @@ export class DashBoardComponent {
         public user: UserService,
         private _im: InfoMonitor
     ) {
-        this.actions = config().app.dash.actions;
         this.categories = config().app.dash.categories;
     }
     onAct (act: string) {

@@ -114,4 +114,42 @@ export const anim = {
     ], {params: {
             time: defaultTime
         }}),
+    blurIn: animation([
+        animate('{{ time }}ms cubic-bezier(0, 1, 0, 1)',
+            keyframes([
+                style({
+                    filter: 'blur({{blur}})',
+                    opacity: 0,
+                    offset: 0
+                }),
+                style({
+                    filter: 'none',
+                    opacity: 1,
+                    offset: 1
+                })
+            ]))
+    ], {
+        params: {
+            time: defaultTime,
+            blur: '3px'
+        }
+    }),
+    blurOut: animation([
+        animate('{{ time }}ms',
+            keyframes([
+                style({
+                    filter: 'none',
+                    opacity: 0,
+                    offset: 0
+                }),
+                style({
+                    filter: 'blur({{blur}})',
+                    opacity: 0,
+                    offset: 1
+                })
+            ]))
+    ], {params: {
+            time: defaultTime,
+            blur: '3px'
+        }}),
 };

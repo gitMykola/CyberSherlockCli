@@ -43,21 +43,22 @@ import {anim} from "./animations";
     animations: [
         trigger('showMenu', [
             state('true', style({
-                transform: 'translateX(0)',
-                // display: '*',
+                filter: 'none',
+                display: '*',
                 opacity: 1
             })),
             state('false', style({
-                transform: 'translateX(100%)',
-                // display: 'none',
+                filter: 'blur(3px)',
+                display: 'none',
                 opacity: 0
             })),
-            transition('* => true', useAnimation(anim.slideRightIn, {
+            transition('* => true', useAnimation(anim.blurIn, {
                 params: {
-                    time: 800
+                    time: 1000,
+                    blur: '50px'
                 }
             })),
-            transition('true => false', useAnimation(anim.slideRightOut))
+            transition('true => false', useAnimation(anim.blurOut))
         ])
     ]
 })

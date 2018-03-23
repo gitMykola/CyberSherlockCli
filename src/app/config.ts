@@ -64,47 +64,105 @@ export function config() {
                         name: 'people',
                         icon: 'people',
                         auth: true,
-                        selected: false
+                        actions: [
+                            {
+                                action: 'find',
+                                icon: 'my_location',
+                                state: false
+                            },
+                            {
+                                action: 'contact',
+                                icon: 'contact',
+                                state: true
+                            },
+                            {
+                                action: 'hide',
+                                icon: 'flip_to_back',
+                                state: false
+                            }
+                        ]
                     },
                     {
                         name: 'media',
                         icon: 'add_a_photo',
                         auth: false,
-                        selected: true
+                        actions: [
+                            {
+                                action: 'find',
+                                icon: 'my_location',
+                                state: false
+                            },
+                            {
+                                action: 'add',
+                                icon: 'add_circle_outline',
+                                auth: false
+                            },
+                            {
+                                action: 'edit',
+                                icon: 'edit_location',
+                                auth: false
+                            },
+                            {
+                                action: 'remove',
+                                icon: 'remove_circle_outline',
+                                auth: false
+                            },
+                            {
+                                action: 'hide',
+                                icon: 'flip_to_back',
+                                auth: false,
+                                selected: false
+                            }
+                        ]
                     },
                     {
                         name: 'tasks',
-                        icon: 'add_location',
+                        icon: 'motorcycle',
                         auth: true,
-                        selected: false
-                    }
-                ],
-                actions: [
-                    {
-                        action: 'find',
-                        icon: 'my_location',
-                        auth: false
+                        actions: [
+                            {
+                                action: 'find',
+                                icon: 'my_location',
+                                state: false
+                            },
+                            {
+                                action: 'add',
+                                icon: 'add_circle_outline',
+                                state: true
+                            },
+                            {
+                                action: 'edit',
+                                icon: 'edit_location',
+                                auth: true
+                            },
+                            {
+                                action: 'remove',
+                                icon: 'remove_circle_outline',
+                                auth: true
+                            },
+                            {
+                                action: 'hide',
+                                icon: 'flip_to_back',
+                                state: false
+                            }
+                        ]
                     },
                     {
-                        action: 'add',
-                        icon: 'add_circle_outline',
-                        auth: false
-                    },
-                    {
-                        action: 'edit',
-                        icon: 'edit_location',
-                        auth: false
-                    },
-                    {
-                        action: 'remove',
-                        icon: 'remove_circle_outline',
-                        auth: false
-                    },
-                    {
-                        action: 'hide',
-                        icon: 'flip_to_back',
-                        auth: false,
-                        selected: false
+                        name: 'room',
+                        icon: 'settings_applications',
+                        auth: true,
+                        actions: [
+                            {
+                                action: 'settings',
+                                icon: 'settings',
+                                state: false
+                            },
+                            {
+                                action: 'profile',
+                                icon: 'person',
+                                auth: false
+                            }
+                        ]
                     }
                 ]
             },

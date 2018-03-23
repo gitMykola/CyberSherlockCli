@@ -30,7 +30,7 @@ import {
     GoogleLoginComponent,
     FacebookLoginComponent,
     TwitterLoginComponent,
-    LinkedLoginComponent
+    LinkedLoginComponent, MediaComponent
 } from './components' ;
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -61,7 +61,8 @@ import {JsonpModule} from '@angular/http';
       GoogleLoginComponent,
       FacebookLoginComponent,
       LinkedLoginComponent,
-      TwitterLoginComponent
+      TwitterLoginComponent,
+      MediaComponent
   ],
   imports: [
     BrowserModule,

@@ -56,10 +56,15 @@ export const RU = {
         tasks: 'Задачи',
         people: 'Люди',
         media: 'Meдиа',
+        room: 'Комната',
         photo: 'Фото',
         video: 'Видео',
         chat: 'Чат',
-        show_all: 'Показать все'
+        show_all: 'Показать все',
+        location: 'Геолокация',
+        latitude: 'Широта',
+        longitude: 'Долгота',
+        type: 'Тип'
     },
     err: {
         server_error: 'Ошибка сервера.',

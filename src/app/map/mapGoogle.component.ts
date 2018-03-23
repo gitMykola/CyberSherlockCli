@@ -11,7 +11,8 @@ import {
     UserService
 } from '../_services';
 import * as $ from 'jquery';
-import {config} from "../config";
+import {config} from '../config';
+import {Media} from '../_services/elements';
 @Component ({
     selector: 'app-map',
     template: `<div class="slide-container" id="map">
@@ -47,6 +48,7 @@ import {config} from "../config";
             </agm-marker>
         </agm-map>
         <app-dash (onAction)="onAction($event)"></app-dash>
+        <app-media-comp [media]="selectedMedia"></app-media-comp>
     </div>`
 })
 export class MapGoogleComponent implements OnInit, AfterViewChecked {
@@ -59,6 +61,7 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     public mediaHide: boolean;
     public taskHide: boolean;
     public peopleHide: boolean;
+    private selectedMedia: Media;
     constructor (
         private _im: InfoMonitor,
         public ts: TranslatorService,
@@ -72,13 +75,6 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     }
     ngOnInit () {
         this.setMapCenter();
-        /*navigator.mediaDevices.getUserMedia({video: true})
-            .then(stream => document.querySelector('video').srcObject = stream);
-        navigator.mediaDevices.enumerateDevices()
-            .then(devs => {
-                console.dir(devs);
-            });
-        console.dir(navigator.mediaDevices.getSupportedConstraints());*/
     }
     setMapCenter () {
         /*try {
@@ -142,11 +138,14 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
                 draggable: true,
                 iconUrl: '../../assets/img/icons/mapGPS/task_new_photo_.png',
                 url: '../../assets/img/odessa.png',
-                opacity: 1
+                opacity: 1,
+                showComponent: false
             })
-                .then(() => {
+                .then(mediaIndex => {
+                    this.selectedMedia = this.media.medias[Number(mediaIndex)];
+                    this.selectedMedia.showComponent = true;
                     this._im.add(this.ts.translate('info.done'), 0);
-                    console.dir(this.media.medias);
+                    console.dir(this.selectedMedia);
                 })
                 .catch(e => this
                     ._im.add(this.ts.translate('info.error') + ' ' + e.message, 1));

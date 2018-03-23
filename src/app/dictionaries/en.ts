@@ -58,8 +58,13 @@ export const EN = {
         media: 'Media',
         photo: 'Photo',
         video: 'Video',
+        room: 'Room',
         chat: 'Chat',
-        show_all: 'Show all'
+        show_all: 'Show all',
+        location: 'Location',
+        latitude: 'Latitude',
+        longitude: 'Longitude',
+        type: 'Type'
     },
     err: {
         server_error: 'Server error',

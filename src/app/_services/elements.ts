@@ -43,6 +43,7 @@ export class Media {
     public local: boolean;
     public draggable: boolean;
     public opacity: number;
+    public showComponent: boolean;
 }
 export class People {
     public location: {

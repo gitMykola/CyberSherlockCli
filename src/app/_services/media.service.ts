@@ -5,7 +5,7 @@ import {UserService} from './user.service';
 @Injectable()
 export class MediaService {
     public medias: Media[];
-    private static _verifyData (data) {
+    public static _verifyData (data) {
         return new Promise((resolve, reject) => {
             try {
                 if (typeof data !== 'object') {
@@ -17,7 +17,7 @@ export class MediaService {
                             },
                             location: (value) => {
                                 return typeof (value) === 'object'
-                                    && Math.abs(value.lat) <= 180 && Math.abs(value.lng) <= 180;
+                                    && Math.abs(value.lat) <= 90 && Math.abs(value.lng) <= 180;
                             },
                             draggable: (value) => {
                                 return typeof (value) === 'boolean';
@@ -51,6 +51,9 @@ export class MediaService {
                             },
                             local: (value) => {
                                 return typeof (value) === 'boolean';
+                            },
+                            showComponent: (value) => {
+                                return typeof (value) === 'boolean';
                             }
                         },
                         keys = Object.keys(data);
@@ -79,7 +82,7 @@ export class MediaService {
                     .then(() => {
                         const newMedia = Object.assign(new Media(), data);
                         this.medias.push(newMedia);
-                        resolve();
+                        resolve(this.medias.length);
                     })
                     .catch(e => {
                         reject(e);

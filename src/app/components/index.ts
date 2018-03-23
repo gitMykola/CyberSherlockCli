@@ -9,3 +9,4 @@ export {GoogleLoginComponent} from './googleLogin.component';
 export {FacebookLoginComponent} from './facebookLogin.component';
 export {LinkedLoginComponent} from './linkedLogin.component';
 export {TwitterLoginComponent} from './twitterLogin.component';
+export {MediaComponent} from './media.component';
