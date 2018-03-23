@@ -45,15 +45,34 @@ export class GoogleLoginComponent {
                             const GoogleAuth = window['gapi'].auth2.getAuthInstance();
                             GoogleAuth.isSignedIn.listen();
                             if (!GoogleAuth.isSignedIn.get()) {
-                                GoogleAuth.signIn();
+                                return GoogleAuth.signIn();
+                            } else {
+                                return true;
                             }
-                            const user = GoogleAuth.currentUser.get();
-                            this._g_user['g_id'] = user.w3.Eea;
-                            this._g_user['g_at'] = user.Zi.access_token;
-                            this._g_user['g_email'] = user.w3.U3;
-                            this._g_user['g_name'] = user.w3.ig;
-                            this._g_user['g_status'] = true;
-                            this.onGoogle.emit(this._g_user);
+                        })
+                        .then (res => {
+                            if (!res) {
+                                console.dir('Google auth error.');
+                                this._g_user['g_status'] = false;
+                                this.onGoogle.emit(this._g_user);
+                                return false;
+                            } else {
+                                try {
+                                    const GoogleAuth = window['gapi'].auth2.getAuthInstance();
+                                    const user = GoogleAuth.currentUser.get();
+                                    this._g_user['g_id'] = user.w3.Eea;
+                                    this._g_user['g_at'] = user.Zi.access_token;
+                                    this._g_user['g_email'] = user.w3.U3;
+                                    this._g_user['g_name'] = user.w3.ig;
+                                    this._g_user['g_status'] = true;
+                                    this.onGoogle.emit(this._g_user);
+                                    return true;
+                                } catch (e) {
+                                    console.dir(e);
+                                    this._g_user['g_status'] = false;
+                                    this.onGoogle.emit(this._g_user);
+                                }
+                            }
                         })
                         .catch(err => {
                             console.dir(err);

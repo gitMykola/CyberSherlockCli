@@ -4,45 +4,83 @@ import {
     TranslatorService
 } from '../_services';
 import {
+    AfterViewChecked,
     AfterViewInit,
     Component
 } from '@angular/core';
 import {config} from '../config';
 import {UserService} from '../_services';
+import {state, style, transition, trigger, useAnimation} from "@angular/animations";
+import {anim} from "./animations";
 
 @Component ({
     selector: 'app-topnav',
     template: `
-    <ul class="nav justify-content-end list" id="topnav">
-      <li class="nav-item" *ngFor="let item of _menu index as i"
-          routerLinkActive="active"
-          [hidden]="item.disabled
-          || (item.name === 'exit' && !userAuth())
-          || (item.name === 'enter' && userAuth())">
-        <a class="nav-link" (click)="action($event, item.name)"
-           routerLink="{{item.name}}">
-            <span class="material-icons">{{item.icon}}</span>
-            <span class="text">{{ts.translate('menu.' + item.name)}}</span>
-        </a>
-      </li>
-        <div id="user-name">
-            <h6>{{userName()}}</h6>
+        <div class="block-absolute-right nav-block">
+            <ul class="nav justify-content-end list" id="topnav"
+                [@showMenu]="menuSlide">
+                <li class="nav-item" *ngFor="let item of menu index as i"
+                    routerLinkActive="active"
+                    [hidden]="item.disabled
+                    || (item.name === 'exit' && !userAuth())
+                    || (item.name === 'enter' && userAuth())">
+                    <a class="nav-link" (click)="action($event, item.name)"
+                       routerLink="{{item.name}}">
+                        <span class="material-icons">{{item.icon}}</span>
+                        <span class="text">{{ts.translate('menu.' + item.name)}}</span>
+                    </a>
+                </li>
+                <div id="user-name">
+                    <h6>{{userName()}}</h6>
+                </div>
+            </ul>
+            <div class="nav-burger"
+                (click)="menuSlide = !menuSlide">
+                <span class="material-icons">menu</span>
+            </div>
         </div>
-    </ul>
-    `
+    `,
+    animations: [
+        trigger('showMenu', [
+            state('true', style({
+                transform: 'translateX(0)',
+                // display: '*',
+                opacity: 1
+            })),
+            state('false', style({
+                transform: 'translateX(100%)',
+                // display: 'none',
+                opacity: 0
+            })),
+            transition('* => true', useAnimation(anim.slideRightIn, {
+                params: {
+                    time: 800
+                }
+            })),
+            transition('true => false', useAnimation(anim.slideRightOut))
+        ])
+    ]
 })
-export class TopNavComponent implements AfterViewInit {
-    _menu: object;
+export class TopNavComponent implements AfterViewInit, AfterViewChecked {
+    public menu: object;
+    public menuSlide: boolean;
     constructor (
         public ts: TranslatorService,
         public im: InfoMonitor,
         private _am: ActionMonitor,
         public _user: UserService
     ) {
-        this._menu = config().app.topnav;
+        this.menu = config().app.topnav;
+        this.menuSlide = false;
     }
     ngAfterViewInit () {
-        this._menu = config().app.topnav;
+        this.menu = config().app.topnav;
+        // this.menuSlide = window.innerWidth > 520;
+    }
+    ngAfterViewChecked () {
+        if (window.innerWidth > 520 && !this.menuSlide) {
+            this.menuSlide = window.innerWidth > 520;
+        }
     }
     action (e: Event, name: string) {
         e.preventDefault();

@@ -355,7 +355,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     googleLogin (g_user: Object) {
         try {
-            console.dir(g_user);
             const self = this;
             if (!g_user['g_status']) {
                 self.im.add(this.ts
@@ -412,7 +411,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         } catch (e) {
             this.im.add(this.ts
-                .translate('error.google') + ' ' + e.message, 2);
+                .translate('err.google') + ' ' + e.message, 2);
         }
     }
     logout (e: Event) {

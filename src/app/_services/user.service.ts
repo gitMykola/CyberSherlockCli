@@ -141,10 +141,8 @@ export class UserService {
                 const params = [];
                 params.push(data['g_id']);
                 params.push(data['g_at']);
-                // params.push(data['g_email']);
-                // params.push(data['g_name']);
                 this._ax('auth_google_login', params)
-                    .then(response => {console.dir(response);
+                    .then(response => {
                         if (response['error']) {
                             return reject(response['error'].code || 'User service error');
                         } else {

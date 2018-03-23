@@ -24,7 +24,7 @@ import * as $ from 'jquery';
             left: 0;
             padding: 0;
             opacity: 0;
-            z-index: 1001;
+            z-index: 1201;
         }
         #last-info p {
             font-size: 25px;

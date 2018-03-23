@@ -187,7 +187,7 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
   width: 100%;
   min-height: 100%;
   background: @color_dark_transparent;
-  z-index: 1000;
+  z-index: 1100;
 };
 .scroll-hide {
   &::-webkit-scrollbar {
@@ -241,3 +241,52 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
     };
   }
 };
+.block-absolute {
+  display: block;
+  position:absolute;
+  top: 0;
+  width: 100%;
+  .scroll-hide;
+};
+.block-absolute-right {
+  .block-absolute;
+  right: 0;
+};
+.block-absolute-left {
+  .block-absolute;
+  left: 0;
+};
+@media screen and (max-width: 768px) {
+  .list {
+    li {
+      min-width: 40px;
+      a{
+        span:nth-child(1) {
+          .font-some-small;
+          padding-right: 30px;
+        }
+        span:nth-child(2) {
+          display: none;
+          .font-some-small;
+        }
+      }
+    }
+  };
+}
+@media screen and (max-width: 520px) {
+  .list {
+    li {
+      min-width: 300px;
+      a{
+        span:nth-child(1) {
+          .font-large;
+          padding-right: 30px;
+        }
+        span:nth-child(2) {
+          .font-large;
+          display: block;
+        }
+      }
+    }
+  };
+}
