@@ -30,8 +30,8 @@ import {Media} from '../_services/elements';
                     [markerClickable]="true"
                     [markerDraggable]="m.draggable"
                     [iconUrl]="m.iconUrl"
-                    (markerClick)="mediaMarkerClick(k)"
-                    (dragEnd)="mapClick($event)"
+                    (markerClick)="mediaMarkerClick(m)"
+                    (dragEnd)="m.setCoords($event['coords'])"
                     [opacity]="m.opacity">
                 <agm-info-window *ngIf="!m.local">
                     <img [src]="m.url" height="72" width="128">
@@ -61,7 +61,7 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     public mediaHide: boolean;
     public taskHide: boolean;
     public peopleHide: boolean;
-    private selectedMedia: Media;
+    public selectedMedia: Media;
     constructor (
         private _im: InfoMonitor,
         public ts: TranslatorService,
@@ -72,6 +72,7 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     ) {
         this.map = Object.assign(config().app.map.default_sets);
         this.mediaHide = this.taskHide = this.peopleHide = false;
+        this.selectedMedia = new Media();
     }
     ngOnInit () {
         this.setMapCenter();
@@ -133,17 +134,12 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
                 location: {
                     lat: this.map.lat,
                     lng: this.map.lng
-                },
-                local: true,
-                draggable: true,
-                iconUrl: '../../assets/img/icons/mapGPS/task_new_photo_.png',
-                url: '../../assets/img/odessa.png',
-                opacity: 1,
-                showComponent: false
+                }
             })
                 .then(mediaIndex => {
+                    this.selectedMedia.unSelect();
                     this.selectedMedia = this.media.medias[Number(mediaIndex)];
-                    this.selectedMedia.showComponent = true;
+                    this.selectedMedia.select();
                     this._im.add(this.ts.translate('info.done'), 0);
                     console.dir(this.selectedMedia);
                 })
@@ -154,11 +150,15 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
             this.media.medias.forEach(m => m.opacity = m.opacity ? 0 : 1);
             this.mediaHide = !this.mediaHide;
         }
+        if (action === 'edit') {
+            this.selectedMedia.showComponent = true;
+        }
     }
     taskAct(action: string) {}
     peopleAct(action: string) {}
-    mediaMarkerClick(index: number) {
-        this.media.medias.forEach(m => m.iconUrl = m.iconUrl.replace('active', ''));
-        this.media.medias[index].iconUrl = '../../assets/img/icons/mapGPS/task_new_photo_active.png';
+    mediaMarkerClick(med: Media) {
+        this.selectedMedia.unSelect();
+        this.selectedMedia = med;
+        this.selectedMedia.select();
     }
 }

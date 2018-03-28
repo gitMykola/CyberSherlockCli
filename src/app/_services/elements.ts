@@ -19,10 +19,10 @@ export class Media {
         lng: number,
         type: number // 0 - by GPS device, 1 - manual correction, 2 - manual
     };
-    public type: number; // 0-photo, 1-video, 3-audio
+    public type: number; // 0-photo, 1-video, 2-audio
     public created: number; // Unix timestamp
     public txid: string; // location + timestamp + hash
-    public url: string;
+    public url: Array<string>;
     public cost: number;
     public close: boolean;
     public owner: {
@@ -44,6 +44,36 @@ export class Media {
     public draggable: boolean;
     public opacity: number;
     public showComponent: boolean;
+    constructor () {
+        this.location = {
+            lat: 0,
+            lng: 0,
+            type: 2
+        };
+        this.showComponent = false;
+        this.local = true;
+        this.draggable = true;
+        this.type = 0;
+        this.opacity = 1;
+        this.iconUrl = '../../assets/img/icons/mapGPS/task_new_photo_.png';
+        this.url = [];
+        this.cost = 0;
+    }
+    public setCoords (coords: Object) {
+        if (this.draggable) {
+            this.location.lat = coords['lat'];
+            this.location.lng = coords['lng'];
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public select () {
+        this.iconUrl = '../../assets/img/icons/mapGPS/task_new_photo_active.png';
+    }
+    public unSelect () {
+        this.iconUrl = '../../assets/img/icons/mapGPS/task_new_photo_.png';
+    }
 }
 export class People {
     public location: {

@@ -23,7 +23,8 @@ export const RU = {
         ilogin: 'Instagram',
         login: 'Логин',
         logout: 'Выйти',
-        create: 'Создать'
+        create: 'Создать',
+        save: 'Сохранить'
     },
     app: {
         title_1: 'КИБЕР ',
@@ -60,11 +61,7 @@ export const RU = {
         photo: 'Фото',
         video: 'Видео',
         chat: 'Чат',
-        show_all: 'Показать все',
-        location: 'Геолокация',
-        latitude: 'Широта',
-        longitude: 'Долгота',
-        type: 'Тип'
+        show_all: 'Показать все'
     },
     err: {
         server_error: 'Ошибка сервера.',
@@ -95,8 +92,10 @@ export const RU = {
     },
     actions: {
         find: 'Найти',
+        filter: 'Фильтр',
         add: 'Добавить',
         edit: 'Изменить',
+        copy: 'Копировать',
         remove: 'Удалить',
         hide: 'Скрыть'
     },
@@ -113,5 +112,21 @@ export const RU = {
         cn: '德国',
         ru: 'Русский',
         ua: 'Українська',
+    },
+    medias: {
+        location: 'Геолокация',
+        latitude: 'Широта',
+        longitude: 'Долгота',
+        location_type: 'Тип геолокации',
+        location_type_0: 'Ручная',
+        location_type_1: 'Ручная корректировка',
+        location_type_2: 'GPS',
+        media_type: 'Тип',
+        media_type_0: 'Фото',
+        media_type_1: 'Видео',
+        media_type_2: 'Аудио',
+        url: 'Ссылка на медиа объект',
+        preview: 'Предпросмотр',
+        add_media: 'Нажмите, чтобы добавить медиа объект'
     }
 };

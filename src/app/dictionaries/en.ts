@@ -23,7 +23,8 @@ export const EN = {
         ilogin: 'Instagram',
         login: 'Login',
         logout: 'Logout',
-        create: 'Create'
+        create: 'Create',
+        save: 'Save'
     },
     app: {
         title_1: 'CYBER ',
@@ -60,11 +61,7 @@ export const EN = {
         video: 'Video',
         room: 'Room',
         chat: 'Chat',
-        show_all: 'Show all',
-        location: 'Location',
-        latitude: 'Latitude',
-        longitude: 'Longitude',
-        type: 'Type'
+        show_all: 'Show all'
     },
     err: {
         server_error: 'Server error',
@@ -95,8 +92,10 @@ export const EN = {
     },
     actions: {
         find: 'Find',
+        filter: 'Filter',
         add: 'Add',
         edit: 'Edit',
+        copy: 'Copy',
         remove: 'Remove',
         select: 'Select',
         deselect: 'Deselect',
@@ -115,5 +114,21 @@ export const EN = {
         cn: '德国',
         ru: 'Русский',
         ua: 'Українська',
+    },
+    medias: {
+        location: 'Location',
+        latitude: 'Latitude',
+        longitude: 'Longitude',
+        location_type: 'Location type',
+        location_type_0: 'Manual',
+        location_type_1: 'Manual correction',
+        location_type_2: 'GPS',
+        media_type: 'Type',
+        media_type_0: 'Photo',
+        media_type_1: 'Video',
+        media_type_2: 'Audio',
+        url: 'Media object URL',
+        preview: 'Preview',
+        add_media: 'Click to add media object'
     }
 };

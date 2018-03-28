@@ -15,7 +15,8 @@ import {config} from '../config';
                         <span class="material-icons">{{category.icon}}</span>
                         <span title="{{ts.translate('labels.' + category.name)}}">
                         {{ts.translate('labels.' + category.name)}}</span>
-                        <div class="dash-block">
+                    </button>
+                    <div class="dash-block" *ngIf="(!category.auth || user.user.auth) && category.selected">
                             <span *ngFor="let action of category.actions">
                                 <button class="dash-item  {{+ action.selected ? 'active' : ''}}"
                                         *ngIf="!action.auth || user.user.auth"
@@ -25,8 +26,7 @@ import {config} from '../config';
                                     <span>{{ts.translate('actions.' + action.action)}}</span>
                                 </button>
                             </span>
-                        </div>
-                    </button>
+                    </div>
                 </span>
             </div>
         </div>
@@ -47,10 +47,6 @@ export class DashBoardComponent {
         this.categories = config().app.dash.categories;
     }
     onAct (act: string) {
-        const action = this.actions.filter(a => a.action === act)[0];
-        if (action && action.hasOwnProperty('selected')) {
-            action.selected = !action.selected;
-        }
         this.onAction.emit({
             action: act,
             category: this.categories.filter(c => c.selected)[0].name

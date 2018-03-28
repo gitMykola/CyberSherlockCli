@@ -75,13 +75,17 @@ export class TopNavComponent implements AfterViewInit, AfterViewChecked {
         this.menuSlide = false;
     }
     ngAfterViewInit () {
-        this.menu = config().app.topnav;
-        // this.menuSlide = window.innerWidth > 520;
+        try {
+            this.menu = config().app.topnav;
+            this.menuSlide = window.innerWidth > 520;
+        } catch (e) {
+            console.log(e);
+        }
     }
     ngAfterViewChecked () {
-        if (window.innerWidth > 520 && !this.menuSlide) {
+        /*if (window.innerWidth > 520 && !this.menuSlide) {
             this.menuSlide = window.innerWidth > 520;
-        }
+        }*/
     }
     action (e: Event, name: string) {
         e.preventDefault();

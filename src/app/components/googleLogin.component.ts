@@ -37,9 +37,9 @@ export class GoogleLoginComponent {
                 window['gapi'].load('client:auth2', () => {
                     window['gapi'].client.init({
                         apiKey: config().app.google.apiKey,
-                        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+                        // discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
                         clientId: config().app.google.clientId,
-                        scope: 'profile'
+                        scope: 'profile https://www.googleapis.com/auth/drive'
                     })
                         .then(() => {
                             const GoogleAuth = window['gapi'].auth2.getAuthInstance();
@@ -59,7 +59,7 @@ export class GoogleLoginComponent {
                             } else {
                                 try {
                                     const GoogleAuth = window['gapi'].auth2.getAuthInstance();
-                                    const user = GoogleAuth.currentUser.get();
+                                    const user = GoogleAuth.currentUser.get(); console.dir(user);
                                     this._g_user['g_id'] = user.w3.Eea;
                                     this._g_user['g_at'] = user.Zi.access_token;
                                     this._g_user['g_email'] = user.w3.U3;

@@ -7,6 +7,7 @@
 @color_light: #fff;
 @color_dark: #000;
 @color_dark_transparent: rgba(50,50,50,0.9);
+@color_grey_transparent: rgba(50,50,50,0.6);
 @color_dark_grey: #777;
 @color_dark_light: #eee;
 @color_error: #f00;
@@ -115,10 +116,6 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
     border-bottom:1px solid @color_light;
   }
 };
-.flex-row{
-  display: flex;
-  align-items: center;
-};
 .list {
   .active {
     background: @color_main_transparent_super;
@@ -188,6 +185,78 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
   min-height: 100%;
   background: @color_dark_transparent;
   z-index: 1100;
+};
+.modal-component {
+  .modal-block;
+  background: @color_grey_transparent;
+  .modal-form-component {
+    background: @color_main_superlight;
+    .form-block {
+      display: flex;
+      img {
+        border: 1px solid @color_main;
+        border-radius: 3px;
+      };
+    };
+    .button-block {
+      justify-content: center;
+      padding: 5px;
+      button {
+        min-width: 120px;
+      };
+    };
+  };
+  .media-preview {
+    .block-media {
+      .block-video {
+        width: 100%;
+        min-height: 150px;
+        background: radial-gradient(@color_grey_transparent 1%, transparent);
+        padding: 0;
+        video {
+          width: 100%;
+        };
+        img {
+          width: 100%;
+          border: none;
+        }
+        .panel-block {
+          position: absolute;
+          width: 100%;
+          bottom: 5px;
+          margin: 0;
+          padding: 0;
+          h6 {
+            margin: 0;
+            padding: 0;
+          color: @color_main_superlight;
+          };
+          span {
+            .element-dark-transparent;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid @color_main_superlight;
+            color: @color_main_superlight;
+            border-radius: 50%;
+            cursor: pointer;
+            background: radial-gradient(@color_grey_transparent 10%, transparent);
+          };
+        };
+      };
+      .block-img-preview {
+        img {
+          .paragraph-info;
+          margin: 4px;
+          cursor: pointer;
+          border: none;
+          transition: 0.2s transform;
+          &:hover {
+            transform: perspective(500px) rotateY(30deg);
+          };
+        };
+      };
+    };
+  };
 };
 .scroll-hide {
   &::-webkit-scrollbar {
@@ -288,5 +357,12 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
         }
       }
     }
+  };
+  .modal-component {
+    .modal-form-component {
+      .form-block {
+        display: block;
+      };
+    };
   };
 }

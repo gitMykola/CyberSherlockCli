@@ -82,7 +82,7 @@ export class MediaService {
                     .then(() => {
                         const newMedia = Object.assign(new Media(), data);
                         this.medias.push(newMedia);
-                        resolve(this.medias.length);
+                        resolve(this.medias.length - 1);
                     })
                     .catch(e => {
                         reject(e);

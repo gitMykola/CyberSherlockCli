@@ -14,6 +14,10 @@ export function config() {
             },
             linked: {},
             twitter: {},
+            instagram: {
+                clientId: 'e014c1db034945a398132078f975da0f',
+                clientSecret: 'dff6c255d0804bbdb96749db2a42a27c'
+            },
             topnav: [
                 {
                     name: 'map',
@@ -86,10 +90,16 @@ export function config() {
                         name: 'media',
                         icon: 'add_a_photo',
                         auth: false,
+                        selected: true,
                         actions: [
                             {
                                 action: 'find',
                                 icon: 'my_location',
+                                state: false
+                            },
+                            {
+                                action: 'filter',
+                                icon: 'select_all',
                                 state: false
                             },
                             {
@@ -100,6 +110,11 @@ export function config() {
                             {
                                 action: 'edit',
                                 icon: 'edit_location',
+                                auth: false
+                            },
+                            {
+                                action: 'copy',
+                                icon: 'content_copy',
                                 auth: false
                             },
                             {
