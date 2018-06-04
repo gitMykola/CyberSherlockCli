@@ -22,8 +22,7 @@ import {Media} from '../_services/elements';
                  [zoom]="map.zoom"
                  [zoomControl]="false"
                  [mapTypeControl]="true"
-                (mapClick)="mapClick($event)"
-                (centerChange)="mapCenterChange($event)">
+                (mapClick)="mapClick($event)">
             <agm-marker *ngFor="let m of media.medias; index as k"
                     [latitude]="m.location.lat"
                     [longitude]="m.location.lng"
@@ -31,7 +30,7 @@ import {Media} from '../_services/elements';
                     [markerDraggable]="m.draggable"
                     [iconUrl]="m.iconUrl"
                     (markerClick)="mediaMarkerClick(m)"
-                    (dragEnd)="m.setCoords($event['coords'])"
+                    (dragEnd)="mediaMarkerDrag(m, $event)"
                     [opacity]="m.opacity">
                 <agm-info-window *ngIf="!m.local">
                     <img [src]="m.url" height="72" width="128">
@@ -120,14 +119,6 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
             this._im.add(err.message, 2);
         }
     }
-    mapCenterChange(e: any) {
-        try {
-            this.map.lat = e.lat;
-            this.map.lng = e.lng;
-        } catch (err) {
-            this._im.add(err.message, 2);
-        }
-    }
     mediaAct(action: string) {
         if (action === 'add') {
             this.media.addMedia({
@@ -140,8 +131,9 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
                     this.selectedMedia.unSelect();
                     this.selectedMedia = this.media.medias[Number(mediaIndex)];
                     this.selectedMedia.select();
-                    this._im.add(this.ts.translate('info.done'), 0);
-                    console.dir(this.selectedMedia);
+                    this.selectedMedia.showComponent = true;
+                    // this._im.add(this.ts.translate('info.done'), 0);
+                    // console.dir(this.selectedMedia);
                 })
                 .catch(e => this
                     ._im.add(this.ts.translate('info.error') + ' ' + e.message, 1));
@@ -160,5 +152,9 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
         this.selectedMedia.unSelect();
         this.selectedMedia = med;
         this.selectedMedia.select();
+    }
+    mediaMarkerDrag(med: Media, e: Event) {
+        med.setCoords(e['coords']);
+        this.mediaMarkerClick(med);
     }
 }

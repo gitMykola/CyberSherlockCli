@@ -96,7 +96,7 @@ export const EN = {
         add: 'Add',
         edit: 'Edit',
         copy: 'Copy',
-        remove: 'Remove',
+        delete: 'Delete',
         select: 'Select',
         deselect: 'Deselect',
         hide: 'Hide'
@@ -129,6 +129,7 @@ export const EN = {
         media_type_2: 'Audio',
         url: 'Media object URL',
         preview: 'Preview',
-        add_media: 'Click to add media object'
+        add_media: 'Click to add media object',
+        save_to_google_drive: 'Save to Google drive'
     }
 };

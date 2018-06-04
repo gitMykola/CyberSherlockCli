@@ -96,7 +96,7 @@ export const RU = {
         add: 'Добавить',
         edit: 'Изменить',
         copy: 'Копировать',
-        remove: 'Удалить',
+        delete: 'Удалить',
         hide: 'Скрыть'
     },
     info: {
@@ -127,6 +127,7 @@ export const RU = {
         media_type_2: 'Аудио',
         url: 'Ссылка на медиа объект',
         preview: 'Предпросмотр',
-        add_media: 'Нажмите, чтобы добавить медиа объект'
+        add_media: 'Нажмите, чтобы добавить медиа объект',
+        save_to_google_drive: 'Сохранить на Google диск'
     }
 };

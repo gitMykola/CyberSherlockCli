@@ -37,7 +37,7 @@ export class GoogleLoginComponent {
                 window['gapi'].load('client:auth2', () => {
                     window['gapi'].client.init({
                         apiKey: config().app.google.apiKey,
-                        // discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+                        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
                         clientId: config().app.google.clientId,
                         scope: 'profile https://www.googleapis.com/auth/drive'
                     })

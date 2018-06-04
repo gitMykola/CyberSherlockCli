@@ -113,12 +113,7 @@ export function config() {
                                 auth: false
                             },
                             {
-                                action: 'copy',
-                                icon: 'content_copy',
-                                auth: false
-                            },
-                            {
-                                action: 'remove',
+                                action: 'delete',
                                 icon: 'remove_circle_outline',
                                 auth: false
                             },
@@ -151,7 +146,12 @@ export function config() {
                                 auth: true
                             },
                             {
-                                action: 'remove',
+                                action: 'copy',
+                                icon: 'content_copy',
+                                auth: false
+                            },
+                            {
+                                action: 'delete',
                                 icon: 'remove_circle_outline',
                                 auth: true
                             },

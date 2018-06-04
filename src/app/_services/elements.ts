@@ -21,8 +21,10 @@ export class Media {
     };
     public type: number; // 0-photo, 1-video, 2-audio
     public created: number; // Unix timestamp
-    public txid: string; // location + timestamp + hash
-    public url: Array<string>;
+    public txid: string; // hash
+    public filename: string; // timestamp + 'LAT' + value + 'LNG' + value + '.' + extention
+    public url: string;
+    public sources: Src[];
     public cost: number;
     public close: boolean;
     public owner: {
@@ -38,7 +40,7 @@ export class Media {
         vertical: number
     };
     public description: string;
-    public neuro: Array<string>;
+    public neuro: string[];
     public iconUrl: string;
     public local: boolean;
     public draggable: boolean;
@@ -56,7 +58,8 @@ export class Media {
         this.type = 0;
         this.opacity = 1;
         this.iconUrl = '../../assets/img/icons/mapGPS/task_new_photo_.png';
-        this.url = [];
+        this.url = '';
+        this.sources = [];
         this.cost = 0;
     }
     public setCoords (coords: Object) {
@@ -74,6 +77,15 @@ export class Media {
     public unSelect () {
         this.iconUrl = '../../assets/img/icons/mapGPS/task_new_photo_.png';
     }
+}
+export class Src {
+    public src: string;
+    public time: number;
+    public location: {
+        lat: number,
+        lng: number,
+        type: number // 0 - by GPS device, 1 - manual correction, 2 - manual
+    };
 }
 export class People {
     public location: {

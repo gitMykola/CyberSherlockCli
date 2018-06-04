@@ -15,6 +15,10 @@
 h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
   color: @color_main_dark;
 }
+.border-common {
+  border: 1px solid @color_main_superlight;
+  border-radius: 3px;
+};
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -190,7 +194,9 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
   .modal-block;
   background: @color_grey_transparent;
   .modal-form-component {
+    .border-common;
     background: @color_main_superlight;
+    padding: 0;
     .form-block {
       display: flex;
       img {
@@ -215,6 +221,7 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
         padding: 0;
         video {
           width: 100%;
+          border: none;
         };
         img {
           width: 100%;
@@ -242,6 +249,16 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
             background: radial-gradient(@color_grey_transparent 10%, transparent);
           };
         };
+        .panel-block-right {
+          .panel-block;
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: 50px;
+          span {
+            margin: 2px 0;
+          };
+        };
       };
       .block-img-preview {
         img {
@@ -256,6 +273,7 @@ h1,h2,h3,h4,h5,h6,div,a,p,span,label,input,button{
         };
       };
     };
+    padding: 0!important;
   };
 };
 .scroll-hide {
