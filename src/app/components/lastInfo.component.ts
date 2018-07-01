@@ -1,7 +1,7 @@
 import {AfterViewChecked, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {InfoMonitor, ResizeService, TranslatorService} from '../_services';
-import {Info, DT} from '../_services/elements';
+import {Info, DT} from '../lib/classes';
 import {animate, state, style, transition, trigger, useAnimation} from '@angular/animations';
 import {anim} from './animations';
 import * as $ from 'jquery';

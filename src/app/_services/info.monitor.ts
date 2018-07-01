@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import {Info} from './elements';
+import {Info} from '../lib/classes';
 
 @Injectable()
 export class InfoMonitor {

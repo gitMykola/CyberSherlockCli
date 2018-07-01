@@ -97,7 +97,10 @@ export const RU = {
         edit: 'Изменить',
         copy: 'Копировать',
         delete: 'Удалить',
-        hide: 'Скрыть'
+        hide: 'Скрыть',
+        open: 'Открыт',
+        profile: 'Профиль',
+        settings: 'Настройки'
     },
     info: {
         done: 'Сделал',

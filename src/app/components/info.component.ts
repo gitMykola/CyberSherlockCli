@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {InfoMonitor, TranslatorService} from '../_services';
-import {DT} from '../_services/elements';
+import {DT} from '../lib/classes/DT';
 
 @Component ({
     selector: 'app-info',

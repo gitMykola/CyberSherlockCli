@@ -10,7 +10,8 @@ export class UserService {
         id: string,
         email: string,
         phone: string,
-        name: string
+        name: string,
+        token: string
     };
     private _config: any;
     private _axios: any;
@@ -21,12 +22,13 @@ export class UserService {
         this._config = config();
         this._axios = axios;
     }
-    private _userSet(data?: any) {
+    private _userSet(data?: any) {console.dir(data);
         this.user = {
             id: data && data.id || '',
             email: data && data.email || '',
             phone: data && data.phone || '',
-            auth: false,
+            auth: Boolean (data && data.token && data.token.length),
+            token: data && data.token || '',
             name: data && (data.name || data.email || data.phone) || ''
         };
         return true;

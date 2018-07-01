@@ -168,14 +168,19 @@ export function config() {
                         auth: true,
                         actions: [
                             {
-                                action: 'settings',
-                                icon: 'settings',
-                                state: false
+                                action: 'open',
+                                icon: 'accessibility',
+                                auth: false
                             },
                             {
                                 action: 'profile',
                                 icon: 'person',
                                 auth: false
+                            },
+                            {
+                                action: 'settings',
+                                icon: 'settings',
+                                state: false
                             }
                         ]
                     }

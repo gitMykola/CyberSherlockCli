@@ -12,7 +12,7 @@ import {
 } from '../_services';
 import * as $ from 'jquery';
 import {config} from '../config';
-import {Media} from '../_services/elements';
+import {Media} from '../lib/classes';
 @Component ({
     selector: 'app-map',
     template: `<div class="slide-container" id="map">
@@ -129,7 +129,8 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
             })
                 .then(mediaIndex => {
                     this.selectedMedia.unSelect();
-                    this.selectedMedia = this.media.medias[Number(mediaIndex)];
+                    this.selectedMedia = this.media
+                        .medias[this.media.medias.length - 1];
                     this.selectedMedia.select();
                     this.selectedMedia.showComponent = true;
                     // this._im.add(this.ts.translate('info.done'), 0);

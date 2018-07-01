@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {People, Device} from './elements';
+import {People, Device} from '../lib/classes';
 import {UserService} from './user.service';
 
 @Injectable()

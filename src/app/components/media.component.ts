@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Input} from '@angular/core';
-import {Media, Src} from '../_services/elements';
-import {MediaService, TranslatorService} from '../_services';
+import {Media, Src} from '../lib/classes';
+import {InfoMonitor, MediaService, TranslatorService} from '../_services';
 import {Utils} from '../lib';
 import {anim} from './animations';
 import {state, style, transition, trigger, useAnimation} from '@angular/animations';
@@ -40,7 +40,7 @@ import * as sha from 'sha.js';
                                           .translate('buttons.close')}}">
                                     exit_to_app
                                     </span>
-                                    <span (click)="saveToGDrive($event)"
+                                    <span (click)="saveSrcToGDrive($event)"
                                           *ngIf="selectedURL"
                                           class="material-icons"
                                           title="{{ts
@@ -95,7 +95,8 @@ export class MediaComponent implements AfterViewInit {
     public mediaFile: File;
     constructor (
         public ts: TranslatorService,
-        private ms: MediaService,
+        public im: InfoMonitor,
+        public ms: MediaService,
         private http: HttpClient
     ) {
         this._videoOn = false;
@@ -121,8 +122,8 @@ export class MediaComponent implements AfterViewInit {
     }
     changeLocationType (e: Event) {
         e.preventDefault();
-        if (this.media.local) {console.dir();
-            this.media.location.type = e.currentTarget['value'];
+        if (this.media.local) {
+            this.media.location.setType(e.currentTarget['value']);
         } else {
         return false;
         }
@@ -177,132 +178,121 @@ export class MediaComponent implements AfterViewInit {
         this.imgPreview = true;
     }
     saveToGoogleDrive (file: File) {
-        try {
-            // const nFile = new ReadableStreamReader(); // stream.Rea .File.Reader({path: this.media.url[0]}); /*fetch(this.media.url[0])
-            // da5698be17b9b46962335799779fbeca8ce5d491c0d26243bafef9ea1837a9d8
-            // const reader = new FileReader();
-            let nFile = this.media.url[0];
-            let size = '';
-            const src = this.media.url[0].split(',')[1];
-            let resp: any = '';
-            // htp = this.http;
-            Utils.srcToFile([
-                {src: this.media.url[0],
-                 filename: 'newFile.jpg',
-                 mimeType: 'image/jpeg'}
-            ]).next().value
-            .then(function (file) { // make all Google Auth instance
-                console.dir(file[0]);
-                console.log(file[0]['name'] + ' ' + file[0]['size']);
-                console.log(sha('sha256').update(file[0]).digest('hex'));
-                nFile = file[0];
-                size = file[0]['size'];
-                return true;
-            })
-                .then(res => {
-                    resp = res;
-                    const GoogleAuth = window['gapi'].auth2.getAuthInstance();
-                    GoogleAuth.isSignedIn.listen();
-                    if (!GoogleAuth.isSignedIn.get()) {
-                        return GoogleAuth.signIn();
-                    } else {
-                        return true;
-                    }
-                })
-                .then(function (gauth) {
-                    if (!gauth) {console.log('No GAuth');
-                        return false;
-                    } else {console.dir(nFile);
-                        const upl = new uploader.MediaUploader({
-                            metadata: {
-                                'title': 'newFile.jpg',
-                                'name': 'newFile.jpg'
-                            },
-                            permissions: ['anyone'],
-                            file: nFile,
-                            token: window['gapi'].auth2.getAuthInstance()
-                                .currentUser.get().Zi.access_token,
-                            onComplete: (data) => {
-                                const dt = JSON.parse(data);
-                                console.dir(dt['id']);
-                                console.dir(window['gapi']);
-                                window['gapi'].client.request({
-                                    path: 'https://www.googleapis.com/drive/v3/files/'
-                                    + dt.id + '/permissions',
-                                    method: 'POST',
-                                    callback: response => {
-                                            console.dir(response);
+        return new Promise((resolve, reject) => {
+            try {
+                this.getGoogleToken()
+                    .then((token) => {
+                        if (!token) {
+                            this.im.add('No Google Token', 2);
+                            return reject();
+                        } else {
+                            const upl = new uploader.MediaUploader({
+                                metadata: {
+                                    'title': file.name,
+                                    'name': file.name
+                                },
+                                permissions: ['anyone'],
+                                file: file,
+                                token: token,
+                                onComplete: (data) => {
+                                    const dt = JSON.parse(data);
+                                    // console.dir(window['gapi']);
+                                    window['gapi'].client.request({
+                                        path: 'https://www.googleapis.com/drive/v3/files/'
+                                        + dt['id'] + '/permissions',
+                                        method: 'POST',
+                                        callback: response => {
+                                            return resolve(dt['id']);
                                         },
-                                    body: {
-                                        role: 'reader',
-                                        type: 'anyone'
-                                    }
-                                });
-                            },
-                            onError: (error) => {
-                                console.dir(error);
-                            }
-                        });
-                        return upl.upload();
-                        /*return window['gapi'].client.drive.files.create({
-                            resource: nFile,
-                            media: {
-                                mimeType: 'image/jpeg'
-                            },
-                            fields: 'id'
-                        }, function (err, f) { console.log('Done gdrive ...');
-                            if (err) {
-                                return console.dir(err);
-                            } else {
-                                return console.dir(f);
-                            }
-                    });*/
-                        /*return window['gapi'].client
-                            .request({
-                                'path': '/upload/drive/v1/files?uploadType=media',
-                                'method': 'POST',
-                                'title': 'newFile.jpg',
-                                'params': {
-                                    'uploadType': 'media',
-                                    'name': 'newFile.jpg'
+                                        body: {
+                                            role: 'reader',
+                                            type: 'anyone'
+                                        }
+                                    });
                                 },
-                                'headers': {
-                                    'Content-Type': 'image/jpeg',
-                                    'Content-Transfer-Encoding': 'base64'
-                                },
-                                'resource': src
-                            })
-                            .execute(function (err, f) { console.log('Done gdrive ...');
-                            if (err) {
-                                return console.log(err);
-                            } else {
-                                return console.dir(f);
-                            }
-                        });*/
-                    }
-                })
-                .then(fk => console.dir(fk))
-                .catch(err => console.log(err));
-        } catch (e) {
-            console.log(e);
-        }
+                                onError: (error) => {
+                                    return reject(error);
+                                }
+                            });
+                            return upl.upload();
+                        }
+                    })/*
+                    .then(fk => {console.log('fk ' + fk);
+                        return resolve();
+                    })*/
+                    .catch(err => {
+                        return reject(err);
+                    });
+            } catch (e) {
+                return reject(e);
+            }
+        });
     }
-    saveToGDrive() {
+    getGoogleToken() {
+    return new Promise((resolve, reject) => {
+        try {
+            const GoogleAuth = window['gapi'].auth2.getAuthInstance();
+            GoogleAuth.isSignedIn.listen();
+            if (!GoogleAuth.isSignedIn.get()) {
+                GoogleAuth.signIn()
+                    .then(gauth => {
+                        if (!gauth) {
+                            return reject();
+                    } else {
+                            const token = window['gapi'].auth2.getAuthInstance()
+                                .currentUser.get().Zi.access_token;
+                            return resolve(token);
+                        }}
+                    )
+                    .catch(err => {
+                        return reject(err);
+                    });
+            } else {
+                const token = window['gapi'].auth2.getAuthInstance()
+                    .currentUser.get().Zi.access_token;
+                return resolve(token);
+            }
+        } catch (error) {
+            return reject(error);
+        }
+    });
+}
+    saveSrcToGDrive(e: Event) {
+        e.preventDefault();
         console.dir(this.media);
         console.dir(this.selectedIndex);
+        let file: File = null;
         this.createFiles(this.media.sources[this.selectedIndex])
             .then(files => {
-                console.dir(files[0] || 'null');
-                console.log(this.makeSha256(files[0]));
+                file = files[0];
+                return this.makeSha256(file);
+            })
+            .then((fileSHA3: string) => {
+                this.media.sha3 = fileSHA3;
+                this.media.created = this.media.sources[this.selectedIndex].time;
+                this.media.filename = file.name;
+                console.dir(file);
+                console.dir(this.media);
+                return this.saveToGoogleDrive(file);
+            })
+            .then((gUrl: any) => {
+                this.media.url = 'https://drive.google.com/open?id=' + gUrl;
+                return this.ms.sendMediaToServer(this.media);
+            })
+            .then((serverMedia: Media) => {
+                this.im.add('Done ' + String(serverMedia.id), 0);
+                return true;
             })
             .catch(error => {
-                console.log(error);
+                this.im.add(error, 2);
+                return false;
             });
     }
     createFiles(src: Src) {
         return new Promise((resolve, reject) => {
-            const fileName = src.time + 'LAT' + src.location.lat.toString()
-                .replace('.', 'P') + 'LNG' + src.location
+            const location = src.location.getLocation();
+            const fileName = src.time + 'LAT' + location.lat.toString()
+                .replace('.', 'P') + 'LNG' + location
                 .lng.toString().replace('.', 'P') + '.jpg';
             Utils.srcToFile([
                 {src: src.src,
@@ -319,24 +309,31 @@ export class MediaComponent implements AfterViewInit {
     }
     delete(e: Event) {
         e.preventDefault();
+        this.deleteSrc(this.selectedIndex);
+    }
+    deleteSrc(index: number) {
         this.media.sources = this.media.sources.filter((src, ind) => {
-            return ind !== this.selectedIndex;
+            return ind !== index;
         });
         this.selectedIndex = this.selectedIndex > 0 ? --this.selectedIndex : 0;
         this.selectedURL = this.media.sources[this.selectedIndex].src || '';
     }
     sendTo() {}
     makeSha256(file: File) {
-        try {
-            const reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = (event: any) => {
-                const shaF = sha('sha256');
-                console.log(shaF.update(event.target.result).digest('hex'));
-            };
-            reader.onerror = (error: any) => console.log(error);
-        } catch (error) {
-            console.log(error);
-        }
+        return new Promise((resolve, reject) => {
+            try {
+                const reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = (event: any) => {
+                    const shaF = sha('sha256');
+                    return resolve(shaF.update(event.target.result).digest('hex'));
+                };
+                reader.onerror = err => {
+                    return reject(err);
+                };
+            } catch (error) {
+                return reject(error);
+            }
+        })
     }
 }

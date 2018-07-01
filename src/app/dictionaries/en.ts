@@ -99,7 +99,10 @@ export const EN = {
         delete: 'Delete',
         select: 'Select',
         deselect: 'Deselect',
-        hide: 'Hide'
+        hide: 'Hide',
+        open: 'Open',
+        profile: 'Profile',
+        settings: 'Settings'
     },
     info: {
         done: 'Done',
