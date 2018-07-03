@@ -47,7 +47,9 @@ import {Media, People, Task} from '../lib/classes';
             </agm-marker>
         </agm-map>
         <app-dash (onAction)="onAction($event)"></app-dash>
-        <app-media-comp [media]="selectedMedia"></app-media-comp>
+        <app-media-comp
+                [enable]="mediaOpen"
+                [media]="selectedMedia"></app-media-comp>
     </div>`
 })
 export class MapGoogleComponent implements OnInit, AfterViewChecked {
@@ -60,6 +62,9 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     public mediaHide: boolean;
     public taskHide: boolean;
     public peopleHide: boolean;
+    public mediaOpen: boolean;
+    public taskOpen: boolean;
+    public peopleOpen: boolean;
     public selectedMedia: Media;
     public selectedPeople: People;
     public selectedTask: Task;
@@ -73,7 +78,10 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     ) {
         this.map = Object.assign(config().app.map.default_sets);
         this.mediaHide = this.taskHide = this.peopleHide = false;
-        this.selectedMedia = new Media();
+        this.mediaOpen = this.peopleOpen = this.taskOpen = false;
+        this.selectedMedia = new Media({});
+        this.selectedPeople = new People({});
+        this.selectedTask = new Task({});
     }
     ngOnInit () {
         this.setMapCenter();
@@ -104,18 +112,16 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     }
     onAction(action: any) {
         this._im.add(action.category + ' ' + action.action, 0);
-        this[action.category][action.action]({
-            center: {
-                lat: this.map.lat,
-                lng: this.map.lng
-            },
-            media: this.selectedMedia,
-            people: this.selectedPeople,
-            task: this.selectedTask
-        })
+        const data = {
+            lat: this.map.lat,
+            lng: this.map.lng
+        };
+        this[action.category][action.action](data)
             .then(result => {
                 // TODO add selected sign to marker object independed from category
-
+                if (['add', 'edit'].indexOf(action.action) >= 0) {
+                    this[action.category + 'Open'] = true;
+                }
             })
             .catch(error => {
                 this._im.add(this.ts.translate('info.error')
@@ -131,18 +137,15 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     }
     mediaAct(action: string) {
         if (action === 'add') {
-            this.media.addMedia({
-                location: {
+            this.media.add({
                     lat: this.map.lat,
                     lng: this.map.lng
-                }
             })
                 .then(mediaIndex => {
                     this.selectedMedia.unSelect();
                     this.selectedMedia = this.media
                         .medias[this.media.medias.length - 1];
                     this.selectedMedia.select();
-                    this.selectedMedia.showComponent = true;
                     // this._im.add(this.ts.translate('info.done'), 0);
                     // console.dir(this.selectedMedia);
                 })
@@ -154,7 +157,6 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
             this.mediaHide = !this.mediaHide;
         }
         if (action === 'edit') {
-            this.selectedMedia.showComponent = true;
         }
     }
     taskAct(action: string) {}
@@ -165,7 +167,7 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
         this.selectedMedia.select();
     }
     mediaMarkerDrag(med: Media, e: Event) {
-        med.setCoords(e['coords']);
+        med.setLocation(e['coords']);
         this.mediaMarkerClick(med);
     }
 }

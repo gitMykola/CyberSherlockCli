@@ -25,7 +25,7 @@ import * as sha from 'sha.js';
                                 <img [src]="selectedURL" [hidden]="!imgPreview"/>
                                 <div class="panel-block">
                                     <h6 class="col-12"
-                                       *ngIf="media.sources.length < 1">
+                                       *ngIf="media && media.sources.length < 1">
                                         {{ts.translate('medias.add_media')}}</h6>
                                     <span (click)="enableVideo($event)"
                                           class="material-icons"
@@ -88,6 +88,7 @@ export class MediaComponent implements AfterViewInit {
     private _videoOn: boolean;
     private  _video: any;
     private _canva: any;
+    @Input() enable: boolean;
     @Input() media: Media;
     public imgPreview: boolean;
     public selectedURL: string;
@@ -114,11 +115,11 @@ export class MediaComponent implements AfterViewInit {
     mediaCancel (e: Event) {
         e.preventDefault();
         this.imgPreview = false;
-        this.media.showComponent = false;
         if (this._videoOn) {
             this._video.srcObject = null;
             this._videoOn = false;
         }
+        this.enable = false;
     }
     changeLocationType (e: Event) {
         e.preventDefault();
@@ -138,7 +139,7 @@ export class MediaComponent implements AfterViewInit {
     }
     saveMedia (e: Event) {
         e.preventDefault();
-        this.media.showComponent = false;
+        this.enable = false;
     }
     preview (e: Event) {
         e.preventDefault();
@@ -269,7 +270,7 @@ export class MediaComponent implements AfterViewInit {
             })
             .then((fileSHA3: string) => {
                 this.media.sha3 = fileSHA3;
-                this.media.created = this.media.sources[this.selectedIndex].time;
+                this.media.setCreated();
                 this.media.filename = file.name;
                 console.dir(file);
                 console.dir(this.media);

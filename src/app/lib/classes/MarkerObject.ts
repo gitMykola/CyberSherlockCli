@@ -10,14 +10,12 @@ export class MarkerObject {
     public local: boolean;
     public draggable: boolean;
     public opacity: number;
-    public hidden: boolean;
     public description: string;
     constructor () {
         this.location = new Location();
         this.created = new DT((new Date()).getTime());
         this.local = true;
         this.draggable = true;
-        this.hidden = false;
         this.opacity = 1;
         this.iconUrlSelected = '../../assets/img/icons/mapGPS/task_new_photo_active.png';
         this.iconUrlUnSelected = '../../assets/img/icons/mapGPS/task_new_photo_.png';
@@ -40,5 +38,14 @@ export class MarkerObject {
     }
     public unSelect () {
         this.iconUrl = this.iconUrlUnSelected;
+    }
+    public hide() {
+        this.opacity = 0;
+    }
+    public show() {
+        this.opacity = 1;
+    }
+    public transparent() {
+        this.opacity = 0.3;
     }
 }

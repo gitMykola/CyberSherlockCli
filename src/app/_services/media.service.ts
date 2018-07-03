@@ -3,6 +3,7 @@ import {Media} from '../lib/classes';
 import {UserService} from './user.service';
 import axios from 'axios';
 import {config} from '../config';
+import {InfoMonitor} from './info.monitor';
 
 @Injectable()
 export class MediaService {
@@ -96,28 +97,24 @@ export class MediaService {
         });
     }
     constructor (
-        private userService: UserService
+        private userService: UserService,
+        private im: InfoMonitor
     ) {
         this.medias = [];
         this._config = config();
     }
     getMedia () {}
-    addMedia (data: any) {
-        return new Promise( (resolve, reject) => {
+    async add (data: any) {
             try {
-                MediaService._verifyData(data)
-                    .then(() => {
-                        const newMedia = Object.assign(new Media(), data);
-                        this.medias.push(newMedia);
-                        return resolve();
-                    })
-                    .catch(e => {
-                        return reject(e);
-                    });
+                await MediaService._verifyData(data);
+                this.medias.push(
+                    Object.assign(new Media(data), data)
+                );
+                return true;
             } catch (e) {
-                return reject(e);
+                this.im.add(e.message, 0);
+                return false;
             }
-        });
     }
     sendMediaToServer(media: Media) {
         return new Promise((resolve, reject) => {
