@@ -1,14 +1,15 @@
-export class DT {
-    public static toDateHumanString (timestamp: number) {
-        const d = new Date(timestamp * 1000);
-        return ((d.getDate() < 10) ? '0' : '') + d.getDate() + '.'
-            + ((d.getMonth() + 1 < 10) ? '0' : '') + (d.getMonth() + 1) + '.'
-            + d.getFullYear();
+export class DT extends Date {
+    constructor(data) {
+        super(data);
     }
-    public static toTimeHumanString (timestamp: number) {
-        const t = new Date(timestamp * 1000);
-        return ((t.getHours() < 10) ? '0' : '') + t.getHours() + ':'
-            + ((t.getMinutes() < 10) ? '0' : '') + t.getMinutes() + ':'
-            + ((t.getSeconds() < 10) ? '0' : '') + t.getSeconds();
+    public toDateHumanString () {
+        return ((this.getDate() < 10) ? '0' : '') + this.getDate() + '.'
+            + ((this.getMonth() + 1 < 10) ? '0' : '') + (this.getMonth() + 1) + '.'
+            + this.getFullYear();
+    }
+    public toTimeHumanString () {
+        return ((this.getHours() < 10) ? '0' : '') + this.getHours() + ':'
+            + ((this.getMinutes() < 10) ? '0' : '') + this.getMinutes() + ':'
+            + ((this.getSeconds() < 10) ? '0' : '') + this.getSeconds();
     }
 }

@@ -1,18 +1,20 @@
-import {Location} from './Location';
+import {MarkerObject} from './MarkerObject';
 
-export class Task {
+export class Task extends MarkerObject {
     public id: string;
-    public location: Location;
     public type: number;
     public description: string;
     public cost: number;
     public owner: string;
     public state: number;
-    public created: number;
-    public show: boolean;
-    constructor() {
-        this.location = new Location();
-        this.location.setLocation();
+    constructor(data: any) {
+        super();
+        if (data.lat && data.lng) {
+            this.location.setLocation(data.lat, data.lng);
+        }
+        if (data.created) {
+            this.setCreated(data.created);
+        }
     }
 }
 

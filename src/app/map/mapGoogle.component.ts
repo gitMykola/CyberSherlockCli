@@ -12,7 +12,7 @@ import {
 } from '../_services';
 import * as $ from 'jquery';
 import {config} from '../config';
-import {Media} from '../lib/classes';
+import {Media, People, Task} from '../lib/classes';
 @Component ({
     selector: 'app-map',
     template: `<div class="slide-container" id="map">
@@ -61,6 +61,8 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     public taskHide: boolean;
     public peopleHide: boolean;
     public selectedMedia: Media;
+    public selectedPeople: People;
+    public selectedTask: Task;
     constructor (
         private _im: InfoMonitor,
         public ts: TranslatorService,
@@ -102,15 +104,23 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     }
     onAction(action: any) {
         this._im.add(action.category + ' ' + action.action, 0);
-        if (action.category === 'media') {
-            this.mediaAct(action.action);
-        }
-        if (action.category === 'task') {
-            this.taskAct(action.action);
-        }
-        if (action.category === 'people') {
-            this.peopleAct(action.action);
-        }
+        this[action.category][action.action]({
+            center: {
+                lat: this.map.lat,
+                lng: this.map.lng
+            },
+            media: this.selectedMedia,
+            people: this.selectedPeople,
+            task: this.selectedTask
+        })
+            .then(result => {
+                // TODO add selected sign to marker object independed from category
+
+            })
+            .catch(error => {
+                this._im.add(this.ts.translate('info.error')
+                    + ' ' + error.message, 1);
+            });
     }
     mapClick(e: any) {
         try {
