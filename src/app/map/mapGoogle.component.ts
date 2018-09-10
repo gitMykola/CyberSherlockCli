@@ -12,7 +12,7 @@ import {
 } from '../_services';
 import * as $ from 'jquery';
 import {config} from '../config';
-import {Media, People, Task} from '../lib/classes';
+import {DT, Media, People, Task} from '../lib/classes';
 @Component ({
     selector: 'app-map',
     template: `<div class="slide-container" id="map">
@@ -77,14 +77,21 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
         public people: PeopleService
     ) {
         this.map = Object.assign(config().app.map.default_sets);
-        this.mediaHide = this.taskHide = this.peopleHide = false;
-        this.mediaOpen = this.peopleOpen = this.taskOpen = false;
+        this.mediaHide = false;
+        this.taskHide = false;
+        this.peopleHide = false;
+        this.mediaOpen = false;
+        this.peopleOpen = false;
+        this.taskOpen = false;
         this.selectedMedia = new Media({});
         this.selectedPeople = new People({});
         this.selectedTask = new Task({});
+        const d = new DT();
+        console.dir(d);
     }
     ngOnInit () {
         this.setMapCenter();
+        this.mediaOpen = false;
     }
     setMapCenter () {
         /*try {
@@ -142,7 +149,7 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
                     lng: this.map.lng
             })
                 .then(mediaIndex => {
-                    this.selectedMedia.unSelect();
+                    this.selectedMedia.deselect();
                     this.selectedMedia = this.media
                         .medias[this.media.medias.length - 1];
                     this.selectedMedia.select();
@@ -162,7 +169,7 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     taskAct(action: string) {}
     peopleAct(action: string) {}
     mediaMarkerClick(med: Media) {
-        this.selectedMedia.unSelect();
+        this.selectedMedia.deselect();
         this.selectedMedia = med;
         this.selectedMedia.select();
     }

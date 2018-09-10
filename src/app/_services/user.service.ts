@@ -11,7 +11,8 @@ export class UserService {
         email: string,
         phone: string,
         name: string,
-        token: string
+        token: string,
+        authType: number
     };
     private _config: any;
     private _axios: any;
@@ -29,7 +30,8 @@ export class UserService {
             phone: data && data.phone || '',
             auth: Boolean (data && data.token && data.token.length),
             token: data && data.token || '',
-            name: data && (data.name || data.email || data.phone) || ''
+            name: data && (data.name || data.email || data.phone) || '',
+            authType: 0 // 0-'local' 1-'facebook', 2-'google', 3-'linked', 4-'instagram', 'youtube'
         };
         return true;
     }
@@ -126,6 +128,7 @@ export class UserService {
                         } else {
                             this._userSet(response['result']['user']);
                             this.user.auth = true;
+                            this.user.authType = 0;
                             return resolve(true);
                         }
                     })
@@ -150,6 +153,7 @@ export class UserService {
                         } else {
                             this._userSet(response['result']['user']);
                             this.user.auth = true;
+                            this.user.authType = 2;
                             return resolve(true);
                         }
                     })

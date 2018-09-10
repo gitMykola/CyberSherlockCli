@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {InfoMonitor, TranslatorService, UserService} from '../_services';
+import {ActionMonitor, InfoMonitor, TranslatorService, UserService} from '../_services';
 import {config} from '../config';
 
 @Component({
@@ -21,7 +21,7 @@ import {config} from '../config';
                                 <button class="dash-item  {{+ action.selected ? 'active' : ''}}"
                                         *ngIf="!action.auth || user.user.auth"
                                         title="{{ts.translate('actions.' + action.action)}}"
-                                        (click)="onAct(action.action)">
+                                        (click)="onAct(category.name, action.action)">
                                      <span class="material-icons">{{action.icon}}</span>
                                     <span>{{ts.translate('actions.' + action.action)}}</span>
                                 </button>
@@ -42,15 +42,17 @@ export class DashBoardComponent {
     constructor (
         public ts: TranslatorService,
         public user: UserService,
-        private _im: InfoMonitor
+        private _im: InfoMonitor,
+        private _am: ActionMonitor
     ) {
         this.categories = config().app.dash.categories;
     }
-    onAct (act: string) {
-        this.onAction.emit({
-            action: act,
-            category: this.categories.filter(c => c.selected)[0].name
-        });
+    onAct (cat: string, act: string) {
+        // this.onAction.emit({
+        //     action: act,
+        //     category: this.categories.filter(c => c.selected)[0].name
+        // });
+        this._am.onAction$.emit({object: cat, action: act});
     }
     selectCategory (i: number) {
         this.categories.forEach(c => c.selected = false);

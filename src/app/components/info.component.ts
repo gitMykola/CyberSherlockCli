@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {InfoMonitor, TranslatorService} from '../_services';
-import {DT} from '../lib/classes/DT';
+import {DT} from '../lib/classes';
 
 @Component ({
     selector: 'app-info',
@@ -15,8 +15,8 @@ import {DT} from '../lib/classes/DT';
             </tr>
             <tr *ngFor="let info of im.info"
             class="info {{info.type === 2 ? 'error' : info.type === 1 ? 'warrning' : ''}}">
-                <td>{{dt.toDate(info.time)}}</td>
-                <td>{{dt.toTime(info.time)}}</td>
+                <td>{{dt.toDateHumanString(info.time)}}</td>
+                <td>{{dt.toTimeHumanString(info.time)}}</td>
                 <td>{{info.info}}</td>
             </tr>
         </table>
@@ -31,9 +31,12 @@ import {DT} from '../lib/classes/DT';
     `]
 })
 export class InfoComponent {
-    public dt = DT;
+    public dt: DT;
     constructor (
         public im: InfoMonitor,
         public ts: TranslatorService
-    ) {}
+    ) {
+        this.dt = new DT(null);
+        console.dir(this.dt.getDate());
+    }
 }

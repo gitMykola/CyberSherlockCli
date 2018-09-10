@@ -12,7 +12,7 @@ import * as sha from 'sha.js';
     selector: 'app-media-comp',
     template: `
         <div class="modal-component"
-                    id="media-component" [@mediaShow]="media.showComponent">
+                    id="media-component" [@mediaShow]="enable">
             <form class="modal-form-component
                     col-sm-10 offset-sm-1
                     col-lg-8 offset-lg-2">
@@ -180,13 +180,13 @@ export class MediaComponent implements AfterViewInit {
     }
     saveToGoogleDrive (file: File) {
         return new Promise((resolve, reject) => {
-            try {
+            try {console.log('in 1 ...');
                 this.getGoogleToken()
-                    .then((token) => {
-                        if (!token) {
+                    .then((token) => {console.log('in 5 ...');
+                        if (!token) {console.log('in 4 ...');
                             this.im.add('No Google Token', 2);
                             return reject();
-                        } else {
+                        } else {console.log('in 2 ...');
                             const upl = new uploader.MediaUploader({
                                 metadata: {
                                     'title': file.name,
@@ -274,9 +274,9 @@ export class MediaComponent implements AfterViewInit {
                 this.media.filename = file.name;
                 console.dir(file);
                 console.dir(this.media);
-                return this.saveToGoogleDrive(file);
+                return /*'123345';*/this.saveToGoogleDrive(file);
             })
-            .then((gUrl: any) => {
+            .then((gUrl: any) => {console.log('in...');
                 this.media.url = 'https://drive.google.com/open?id=' + gUrl;
                 return this.ms.sendMediaToServer(this.media);
             })
@@ -335,6 +335,6 @@ export class MediaComponent implements AfterViewInit {
             } catch (error) {
                 return reject(error);
             }
-        })
+        });
     }
 }

@@ -4,10 +4,13 @@ import {UserService} from './user.service';
 import axios from 'axios';
 import {config} from '../config';
 import {InfoMonitor} from './info.monitor';
+import {ActionMonitor} from "./action.monitor";
+import {Subscription} from "rxjs/Subscription";
 
 @Injectable()
 export class MediaService {
     private _config: any;
+    public action: Subscription;
     public medias: Media[];
     public static _verifyData (data) {
         return new Promise((resolve, reject) => {
@@ -98,10 +101,16 @@ export class MediaService {
     }
     constructor (
         private userService: UserService,
-        private im: InfoMonitor
+        private im: InfoMonitor,
+        private am: ActionMonitor
     ) {
         this.medias = [];
         this._config = config();
+        this.action = this.am.onAction$.subscribe(data => {
+            if (data['category'] === 'media') {
+                this.im.add('Media action: ' + data['action'], 0);
+            }
+        });
     }
     getMedia () {}
     async add (data: any) {
@@ -128,7 +137,7 @@ export class MediaService {
                         sha3: media.sha3,
                         url: media.url,
                         cost: media.cost,
-                        //deviceType: media.deviceType,
+                        deviceType: media.deviceType,
                         direction: media.direction
                     };
                 MediaService._verifyData(data)

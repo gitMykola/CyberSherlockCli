@@ -18,7 +18,8 @@ import {anim} from "./animations";
     template: `
         <div class="block-absolute-right nav-block">
             <ul class="nav justify-content-end list" id="topnav"
-                [@showMenu]="menuSlide">
+                [@showMenu]="menuSlide"
+            >
                 <li class="nav-item" *ngFor="let item of menu index as i"
                     routerLinkActive="active"
                     [hidden]="item.disabled
@@ -77,19 +78,28 @@ export class TopNavComponent implements AfterViewInit, AfterViewChecked {
     ngAfterViewInit () {
         try {
             this.menu = config().app.topnav;
-            this.menuSlide = window.innerWidth > 520;
+            setTimeout(() => {
+              this.menuSlide = window.innerWidth > 520;
+            }, 10);
         } catch (e) {
             console.log(e);
         }
     }
     ngAfterViewChecked () {
-        /*if (window.innerWidth > 520 && !this.menuSlide) {
+        if (window.innerWidth > 520 && !this.menuSlide) {
+          setTimeout(() => {
             this.menuSlide = window.innerWidth > 520;
-        }*/
+          }, 10);
+        }
     }
     action (e: Event, name: string) {
         e.preventDefault();
-        this._am.onAction$.emit(name);
+        this._am.onAction$.emit({object: 'menu', action: name});
+        if (window.innerWidth < 520 && this.menuSlide) {
+          setTimeout(() => {
+            this.menuSlide = false;
+          }, 10);
+        }
     }
     userName(): string {
         return this._user.user.name;

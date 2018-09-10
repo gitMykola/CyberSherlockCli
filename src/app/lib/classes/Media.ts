@@ -1,7 +1,7 @@
 import {Src} from './Src';
 import {MarkerObject} from './MarkerObject';
 
-export class Media extends MarkerObject{
+export class Media extends MarkerObject {
     public id: string;
     public type: number; // 0-photo, 1-video, 2-audio
     public txid: string; // hash
@@ -38,7 +38,6 @@ export class Media extends MarkerObject{
         this.owner = '';
         this.iconUrlSelected = '../../assets/img/icons/mapGPS/task_new_photo_active.png';
         this.iconUrlUnSelected = '../../assets/img/icons/mapGPS/task_new_photo_.png';
-        this.iconUrl = this.iconUrlUnSelected;
     }
     public getFileName (ext: string = 'jpg') {
         const location = this.location.getLocation();

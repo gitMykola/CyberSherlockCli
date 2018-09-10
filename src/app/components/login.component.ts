@@ -161,9 +161,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     ngOnInit () {
         this._action = this._am.onAction$
-            .subscribe(action => {
-                return action === 'enter' ? this.loginAction() :
-                    action === 'exit' ? this.showLogout = true : null;
+            .subscribe(data => {
+                if (data.object === 'menu') {
+                    return data.action === 'enter' ? this.loginAction() :
+                        data.action === 'exit' ? this.showLogout = true : null;
+                } else {
+                    return false;
+                }
             });
         this._loginForm = document.querySelector('#loginForm');
     }
@@ -179,7 +183,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         e.preventDefault();
        this.lin = stateLin;
     }
-    showValidateFormFieldError (target: any, showError: boolean = false) {
+        showValidateFormFieldError (target: any, showError: boolean = false) {
         const tElement = target.previousElementSibling;
         if (target.name === 'email' && target.value.match(/(^\+\d+$)|(\d+$)/) !== null) {
             target = {
