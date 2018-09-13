@@ -3,16 +3,18 @@ import {
     Component, OnInit
 } from '@angular/core';
 import {
-    InfoMonitor,
-    MediaService,
-    PeopleService,
-    TaskService,
-    TranslatorService,
-    UserService
+  ActionMonitor,
+  InfoMonitor,
+  MediaService,
+  PeopleService,
+  TaskService,
+  TranslatorService,
+  UserService
 } from '../_services';
 import * as $ from 'jquery';
 import {config} from '../config';
-import {DT, Media, People, Task} from '../lib/classes';
+import {Media, People, Task, Location} from '../lib/classes';
+import {Subscription} from "rxjs";
 @Component ({
     selector: 'app-map',
     template: `<div class="slide-container" id="map">
@@ -24,8 +26,8 @@ import {DT, Media, People, Task} from '../lib/classes';
                  [mapTypeControl]="true"
                 (mapClick)="mapClick($event)">
             <agm-marker *ngFor="let m of media.medias; index as k"
-                    [latitude]="m.location.lat"
-                    [longitude]="m.location.lng"
+                    [latitude]="m.location.getLocation().lat"
+                    [longitude]="m.location.getLocation().lng"
                     [markerClickable]="true"
                     [markerDraggable]="m.draggable"
                     [iconUrl]="m.iconUrl"
@@ -47,12 +49,12 @@ import {DT, Media, People, Task} from '../lib/classes';
             </agm-marker>
         </agm-map>
         <app-dash (onAction)="onAction($event)"></app-dash>
-        <app-media-comp
-                [enable]="mediaOpen"
-                [media]="selectedMedia"></app-media-comp>
+        <app-media-comp></app-media-comp>
     </div>`
 })
 export class MapGoogleComponent implements OnInit, AfterViewChecked {
+    private _currentLocation: Location;
+    private _autoLocation: boolean;
     public map: {
         lat: number,
         lng: number,
@@ -68,13 +70,15 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     public selectedMedia: Media;
     public selectedPeople: People;
     public selectedTask: Task;
+    public act: Subscription;
     constructor (
         private _im: InfoMonitor,
+        private _am: ActionMonitor,
         public ts: TranslatorService,
         public user: UserService,
         public task: TaskService,
         public media: MediaService,
-        public people: PeopleService
+        public people: PeopleService,
     ) {
         this.map = Object.assign(config().app.map.default_sets);
         this.mediaHide = false;
@@ -86,29 +90,44 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
         this.selectedMedia = new Media({});
         this.selectedPeople = new People({});
         this.selectedTask = new Task({});
-        const d = new DT();
-        console.dir(d);
+        this.act = this._am.onAction$.subscribe(data => {
+          console.dir(data);
+          if (['task', 'media', 'people'].indexOf(data.object) >= 0) {
+            this.onAction(data);
+          }
+        });
+        this._currentLocation = new Location();
     }
     ngOnInit () {
         this.setMapCenter();
         this.mediaOpen = false;
     }
-    setMapCenter () {
-        /*try {
-            if (navigator.geolocation) {
+    setMapCenter (data: any = null) {
+        try {
+            if (navigator.geolocation && !data) {
                 navigator.geolocation.getCurrentPosition( position => {
                     this.map.lat = position.coords.latitude;
                     this.map.lng = position.coords.longitude;
                     this.map.zoom = 18;
+                    this._autoLocation = true;
+                    this._currentLocation.setLocation(this.map.lat, this.map.lng);
+                    this._currentLocation.setType(2);
                 }, error => {
                     this._im.add(this.ts.translate('info.manual_location'), 1);
+                    this._autoLocation = false;
                 });
             } else {
+                this.map.lat = data['lat'] || 0;
+                this.map.lng = data['lng'] || 0;
+                this._currentLocation.setLocation(this.map.lat, this.map.lng);
+                this._currentLocation.setType(1);
                 this._im.add(this.ts.translate('info.manual_location'), 1);
+                this._autoLocation = false;
             }
         } catch (e) {
             this._im.add(e, 2);
-        }*/
+            this._autoLocation = false;
+        }
     }
     ngAfterViewChecked () {
         const h = window.innerHeight,
@@ -118,25 +137,36 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
         }
     }
     onAction(action: any) {
-        this._im.add(action.category + ' ' + action.action, 0);
+        this._im.add(action.object + ' ' + action.action, 0);
         const data = {
-            lat: this.map.lat,
-            lng: this.map.lng
+          location: this._currentLocation.getLocation()
         };
-        this[action.category][action.action](data)
-            .then(result => {
+          if (this[action.object] && this[action.object][action.action]) {
+            this[action.object][action.action](data)
+              .then(result => {
                 // TODO add selected sign to marker object independed from category
                 if (['add', 'edit'].indexOf(action.action) >= 0) {
-                    this[action.category + 'Open'] = true;
+                  if (['add'].indexOf(action.action) >= 0) {
+                    this.media.select(this.media.medias.length - 1);
+                  }
+                  this._am.onAction$.emit({
+                    object: 'media',
+                    action: 'openMedia'
+                  });
                 }
-            })
-            .catch(error => {
+              })
+              .catch(error => {
                 this._im.add(this.ts.translate('info.error')
-                    + ' ' + error.message, 1);
-            });
+                  + ' ' + error.message, 1);
+              });
+          }
     }
     mapClick(e: any) {
         try {
+            this.setMapCenter({
+              lat: e.coords.lat,
+              lng: e.coords.lng
+            });
             this._im.add(e.coords.lat + ' ' + e.coords.lng, 0);
         } catch (err) {
             this._im.add(err.message, 2);
@@ -178,3 +208,4 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
         this.mediaMarkerClick(med);
     }
 }
+

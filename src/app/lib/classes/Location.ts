@@ -7,14 +7,16 @@ export class Location {
         this.lng = lng;
         this.type = type;
     }
-    public setLocation(lat: number = 0, lng: number = 0) {
+    public setLocation(lat: number = 0, lng: number = 0, type: number = 0) {
         this.lat = lat;
         this.lng = lng;
+        if (type) { this.type = type; }
     }
     public getLocation() {
         return {
             lat: this.lat,
-            lng: this.lng
+            lng: this.lng,
+            type: this.type
         };
     }
     public setType(type: number = 2) {

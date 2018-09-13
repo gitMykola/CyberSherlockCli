@@ -19,8 +19,8 @@ export class Media extends MarkerObject {
     public neuro: string[];
     constructor (data: any) {
         super();
-        if (data.lat && data.lng) {
-            this.location.setLocation(data.lat, data.lng);
+        if (data.location) {
+            this.location.setLocation(data.location.lat, data.location.lng, data.location.type);
         }
         this.id = '';
         this.type = 0;

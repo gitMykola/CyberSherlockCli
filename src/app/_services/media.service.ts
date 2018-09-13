@@ -12,7 +12,7 @@ export class MediaService {
     private _config: any;
     public action: Subscription;
     public medias: Media[];
-    public static _verifyData (data) {
+    public static verifyData (data) {
         return new Promise((resolve, reject) => {
             try {
                 if (typeof data !== 'object') {
@@ -115,15 +115,28 @@ export class MediaService {
     getMedia () {}
     async add (data: any) {
             try {
-                await MediaService._verifyData(data);
+              console.dir(data);
+                await MediaService.verifyData(data)
+                console.dir("kjbsclkzjsnd");
                 this.medias.push(
-                    Object.assign(new Media(data), data)
-                );
+                    new Media(data)
+                );console.dir(this.medias);
                 return true;
             } catch (e) {
                 this.im.add(e.message, 0);
                 return false;
             }
+    }
+    async edit () {
+      return true;
+    }
+    getSelectedMedia () {
+      return this.medias.filter(media => media.selected)[0];
+    }
+    select(index: number = 0) {
+      this.medias.map((media, ind) => {
+        media.selected = (ind === index);
+      });
     }
     sendMediaToServer(media: Media) {
         return new Promise((resolve, reject) => {
@@ -132,7 +145,7 @@ export class MediaService {
                         user: this.userService.user.id,
                         location: media.location,
                         category: media.type,
-                        created: media.created,
+                        created: media.created.getTime(),
                         filename: media.filename,
                         sha3: media.sha3,
                         url: media.url,
@@ -140,8 +153,8 @@ export class MediaService {
                         deviceType: media.deviceType,
                         direction: media.direction
                     };
-                MediaService._verifyData(data)
-                    .then(() => {
+                MediaService.verifyData(data)
+                    .then(() => {console.dir(data);
                         return this._ax('media_auth_create',
                             [JSON.stringify(data)]);
                     })

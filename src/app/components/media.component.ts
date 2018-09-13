@@ -1,12 +1,13 @@
 import {AfterViewInit, Component, Input} from '@angular/core';
 import {Media, Src} from '../lib/classes';
-import {InfoMonitor, MediaService, TranslatorService} from '../_services';
+import {ActionMonitor, InfoMonitor, MediaService, TranslatorService} from '../_services';
 import {Utils} from '../lib';
 import {anim} from './animations';
 import {state, style, transition, trigger, useAnimation} from '@angular/animations';
 import * as uploader from '../lib/uploader.js';
 import {HttpClient} from '@angular/common/http';
 import * as sha from 'sha.js';
+import {Subscription} from "rxjs";
 
 @Component ({
     selector: 'app-media-comp',
@@ -25,7 +26,7 @@ import * as sha from 'sha.js';
                                 <img [src]="selectedURL" [hidden]="!imgPreview"/>
                                 <div class="panel-block">
                                     <h6 class="col-12"
-                                       *ngIf="media && media.sources.length < 1">
+                                       *ngIf="media && media.sources && media.sources.length < 1">
                                         {{ts.translate('medias.add_media')}}</h6>
                                     <span (click)="enableVideo($event)"
                                           class="material-icons"
@@ -41,7 +42,7 @@ import * as sha from 'sha.js';
                                     exit_to_app
                                     </span>
                                     <span (click)="saveSrcToGDrive($event)"
-                                          *ngIf="selectedURL"
+                                          *ngIf="selectedURL && !media.id"
                                           class="material-icons"
                                           title="{{ts
                                           .translate('medias.save_to_google_drive')}}">
@@ -56,7 +57,7 @@ import * as sha from 'sha.js';
                                     </span>
                                 </div>
                             </div>
-                            <div class="block-img-preview col-12 text-center">
+                            <div class="block-img-preview col-12 text-center" *ngIf="enable">
                                 <img *ngFor="let msrc of media.sources; index as ik"
                                      [src]="msrc.src"
                                      height="80px"
@@ -88,8 +89,10 @@ export class MediaComponent implements AfterViewInit {
     private _videoOn: boolean;
     private  _video: any;
     private _canva: any;
-    @Input() enable: boolean;
-    @Input() media: Media;
+    private _open: Subscription;
+    private _domComponent: any;
+    public enable: boolean;
+    public media: Media;
     public imgPreview: boolean;
     public selectedURL: string;
     public selectedIndex: number;
@@ -98,18 +101,32 @@ export class MediaComponent implements AfterViewInit {
         public ts: TranslatorService,
         public im: InfoMonitor,
         public ms: MediaService,
-        private http: HttpClient
+        private http: HttpClient,
+        private _am: ActionMonitor
     ) {
+        this.enable = false;
         this._videoOn = false;
         this._canva = this._video = null;
         this.imgPreview = false;
         this.selectedURL = '';
         this.selectedIndex = 0;
+        this._open = this._am.onAction$.subscribe(data => {
+            if (['media'].indexOf(data['object']) >= 0 && ['openMedia'].indexOf(data['action']) >= 0) {
+              this.showComponent();
+            }
+        });
     }
     ngAfterViewInit () {
-        this._form = document.querySelector('#media-component form');
-        this._video = document.querySelector('video');
         this._canva = document.createElement('canvas');
+        this._domComponent = document.getElementById('media-component');
+    }
+    showComponent () {
+      this.media = this.ms.getSelectedMedia();
+      this.enable = true;
+      this._form = this._domComponent.querySelector('form');
+      console.dir(this._form);
+      this._video = this._form.querySelector('video');
+      console.dir(this._video);
     }
     showValidateFormFieldError () {}
     mediaCancel (e: Event) {
@@ -262,8 +279,11 @@ export class MediaComponent implements AfterViewInit {
         e.preventDefault();
         console.dir(this.media);
         console.dir(this.selectedIndex);
+        const srcSelected = Object.create(this.media.sources[this.selectedIndex]);
+        this.media.sources = [];
+        this.media.sources.push(srcSelected);
         let file: File = null;
-        this.createFiles(this.media.sources[this.selectedIndex])
+        this.createFiles( srcSelected /*this.media.sources[this.selectedIndex]*/ )
             .then(files => {
                 file = files[0];
                 return this.makeSha256(file);
@@ -281,7 +301,8 @@ export class MediaComponent implements AfterViewInit {
                 return this.ms.sendMediaToServer(this.media);
             })
             .then((serverMedia: Media) => {
-                this.im.add('Done ' + String(serverMedia.id), 0);
+              this.media.id = serverMedia.id;
+                this.im.add('Done! Media created. Id: ' + String(this.media.id), 0);
                 return true;
             })
             .catch(error => {
@@ -338,3 +359,5 @@ export class MediaComponent implements AfterViewInit {
         });
     }
 }
+
+// TODO remove all src after saveToGoogleDrive
