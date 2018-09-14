@@ -27,7 +27,23 @@ export class MediaService {
                             },
                             location: (value) => {
                                 return typeof (value) === 'object'
-                                    && Math.abs(value.lat) <= 90 && Math.abs(value.lng) <= 180;
+                                    && ((Math.abs(value.lat) <= 90 && Math.abs(value.lng) <= 180)
+                                  || (typeof value.type === 'string'
+                                    && (Math.abs(value.coordinates[1]) <= 90
+                                      && Math.abs(value.coordinates[0]) <= 180)
+                                  ));
+                            },
+                            filter: (value) => {
+                              return value.type === 'Poligon'
+                                && typeof (value.coordinates) === 'object'
+                                && typeof (value.coordinates[0][0][0]) === 'number'
+                                && typeof (value.coordinates[0][0][1]) === 'number'
+                                && typeof (value.coordinates[0][1][0]) === 'number'
+                                && typeof (value.coordinates[0][1][1]) === 'number'
+                                && typeof (value.coordinates[0][2][0]) === 'number'
+                                && typeof (value.coordinates[0][2][1]) === 'number'
+                                && typeof (value.coordinates[0][3][0]) === 'number'
+                                && typeof (value.coordinates[0][3][1]) === 'number';
                             },
                             draggable: (value) => {
                                 return typeof (value) === 'boolean';
@@ -115,12 +131,10 @@ export class MediaService {
     getMedia () {}
     async add (data: any) {
             try {
-              console.dir(data);
-                await MediaService.verifyData(data)
-                console.dir("kjbsclkzjsnd");
+                await MediaService.verifyData(data);
                 this.medias.push(
                     new Media(data)
-                );console.dir(this.medias);
+                );
                 return true;
             } catch (e) {
                 this.im.add(e.message, 0);
@@ -130,6 +144,7 @@ export class MediaService {
     async edit () {
       return true;
     }
+    async getMediaByFilter (filter: any) {}
     getSelectedMedia () {
       return this.medias.filter(media => media.selected)[0];
     }
@@ -143,7 +158,13 @@ export class MediaService {
             try {
                     const data = {
                         user: this.userService.user.id,
-                        location: media.location,
+                        location: {
+                          type: 'Point',
+                          coordinates: [
+                            media.location.getLocation().lng,
+                            media.location.getLocation().lat
+                          ]
+                        },
                         category: media.type,
                         created: media.created.getTime(),
                         filename: media.filename,
@@ -174,7 +195,14 @@ export class MediaService {
             }
         });
     }
-    getByFilter () {}
+    async filter (filter) {console.dir(filter);
+      await MediaService.verifyData(filter);
+      return await this._ax('media_auth_get_by_filter',
+        [JSON.stringify(filter)]);
+    }
+    async find() {
+      return true;
+    }
     private _ax (method: string, params: any) {
         return new Promise( (resolve, reject) => {
             try {

@@ -24,7 +24,7 @@ import {Subscription} from "rxjs";
                                 <video autoplay [hidden]="imgPreview">
                                 </video>
                                 <img [src]="selectedURL" [hidden]="!imgPreview"/>
-                                <div class="panel-block">
+                                <div class="panel-block" *ngIf="media && !media.id">
                                     <h6 class="col-12"
                                        *ngIf="media && media.sources && media.sources.length < 1">
                                         {{ts.translate('medias.add_media')}}</h6>
@@ -57,7 +57,7 @@ import {Subscription} from "rxjs";
                                     </span>
                                 </div>
                             </div>
-                            <div class="block-img-preview col-12 text-center" *ngIf="enable">
+                            <div class="block-img-preview col-12 text-center" *ngIf="enable && !media.id">
                                 <img *ngFor="let msrc of media.sources; index as ik"
                                      [src]="msrc.src"
                                      height="80px"
@@ -124,9 +124,10 @@ export class MediaComponent implements AfterViewInit {
       this.media = this.ms.getSelectedMedia();
       this.enable = true;
       this._form = this._domComponent.querySelector('form');
-      console.dir(this._form);
       this._video = this._form.querySelector('video');
-      console.dir(this._video);
+      if (this.media.id) {
+        this.enablePreview(0);
+      }
     }
     showValidateFormFieldError () {}
     mediaCancel (e: Event) {

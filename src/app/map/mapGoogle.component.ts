@@ -1,6 +1,6 @@
 import {
-    AfterViewChecked,
-    Component, OnInit
+  AfterViewChecked,
+  Component, OnInit, ViewChild
 } from '@angular/core';
 import {
   ActionMonitor,
@@ -15,6 +15,7 @@ import * as $ from 'jquery';
 import {config} from '../config';
 import {Media, People, Task, Location} from '../lib/classes';
 import {Subscription} from "rxjs";
+import {LatLngLiteral} from "@agm/core";
 @Component ({
     selector: 'app-map',
     template: `<div class="slide-container" id="map">
@@ -47,6 +48,11 @@ import {Subscription} from "rxjs";
                     <p>Map center</p>
                 </agm-info-window>
             </agm-marker>
+          <agm-polygon #polygon
+            [paths]="poligon"
+            *ngIf="filterEnable"
+            [editable]="true"
+          ></agm-polygon>
         </agm-map>
         <app-dash (onAction)="onAction($event)"></app-dash>
         <app-media-comp></app-media-comp>
@@ -55,6 +61,9 @@ import {Subscription} from "rxjs";
 export class MapGoogleComponent implements OnInit, AfterViewChecked {
     private _currentLocation: Location;
     private _autoLocation: boolean;
+    public filterEnable: boolean;
+    public filter: object;
+    public poligon: Array<LatLngLiteral>;
     public map: {
         lat: number,
         lng: number,
@@ -71,6 +80,7 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     public selectedPeople: People;
     public selectedTask: Task;
     public act: Subscription;
+    @ViewChild('polygon') polygon: Element;
     constructor (
         private _im: InfoMonitor,
         private _am: ActionMonitor,
@@ -91,12 +101,17 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
         this.selectedPeople = new People({});
         this.selectedTask = new Task({});
         this.act = this._am.onAction$.subscribe(data => {
-          console.dir(data);
           if (['task', 'media', 'people'].indexOf(data.object) >= 0) {
             this.onAction(data);
           }
         });
         this._currentLocation = new Location();
+        this.filterEnable = false;
+        this.filter = {
+          type: 'Poligon',
+          coordinates: [[]]
+        };
+        this.poligon = [];
     }
     ngOnInit () {
         this.setMapCenter();
@@ -124,6 +139,11 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
                 this._im.add(this.ts.translate('info.manual_location'), 1);
                 this._autoLocation = false;
             }
+            this.poligon = [];
+            this.poligon.push({lat: this.map.lat * 1.000005, lng: this.map.lng * 1.00001});
+            this.poligon.push({lat: this.map.lat + this.map.lat * 0.000005, lng: this.map.lng - this.map.lng * 0.00001});
+            this.poligon.push({lat: this.map.lat - this.map.lat * 0.000005, lng: this.map.lng - this.map.lng * 0.00001});
+            this.poligon.push({lat: this.map.lat - this.map.lat * 0.000005, lng: this.map.lng + this.map.lng * 0.00001});
         } catch (e) {
             this._im.add(e, 2);
             this._autoLocation = false;
@@ -138,27 +158,46 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     }
     onAction(action: any) {
         this._im.add(action.object + ' ' + action.action, 0);
-        const data = {
+        let data = Object.assign({
           location: this._currentLocation.getLocation()
-        };
+        });
           if (this[action.object] && this[action.object][action.action]) {
-            this[action.object][action.action](data)
-              .then(result => {
-                // TODO add selected sign to marker object independed from category
-                if (['add', 'edit'].indexOf(action.action) >= 0) {
-                  if (['add'].indexOf(action.action) >= 0) {
-                    this.media.select(this.media.medias.length - 1);
-                  }
-                  this._am.onAction$.emit({
-                    object: 'media',
-                    action: 'openMedia'
-                  });
-                }
-              })
-              .catch(error => {
-                this._im.add(this.ts.translate('info.error')
-                  + ' ' + error.message, 1);
+            if (['filter'].indexOf(action.action) >= 0) {console.dir(this.poligon);
+              this.filterEnable = !this.filterEnable;
+              data = Object.assign({
+                type: 'Poligon',
+                coordinates: [[]]
               });
+              this.poligon.map(crd => {
+                data.coordinates[0].push([crd.lng, crd.lat]);
+              });
+            }
+            if (['find'].indexOf(action.action) >= 0) {console.dir(this.poligon);
+              if (this.filterEnable) {
+                console.dir(this.polygon);
+                this.poligon.shift();
+                // this.poligon[3] = {lat: this.map.lat - this.map.lat * 0.000007, lng: this.map.lng + this.map.lng * 0.00003}
+                console.dir(this.poligon);
+              }
+            }
+              this[action.object][action.action](data)
+                .then(result => {
+                  // TODO add selected sign to marker object independed from category
+                  if (['add', 'edit'].indexOf(action.action) >= 0) {
+                    if (['add'].indexOf(action.action) >= 0) {
+                      this.media.select(this.media.medias.length - 1);
+                    }
+                    this._am.onAction$.emit({
+                      object: 'media',
+                      action: 'openMedia'
+                    });
+                  }
+                })
+                .catch(error => {
+                  this._im.add(this.ts.translate('info.error')
+                    + ' ' + error.message, 1);
+                });
+
           }
     }
     mapClick(e: any) {
@@ -206,6 +245,9 @@ export class MapGoogleComponent implements OnInit, AfterViewChecked {
     mediaMarkerDrag(med: Media, e: Event) {
         med.setLocation(e['coords']);
         this.mediaMarkerClick(med);
+    }
+    showPoligon(data: Event) {
+      console.dir(data);
     }
 }
 
